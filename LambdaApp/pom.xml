@@ -6,7 +6,7 @@
 
     <groupId>groupId</groupId>
     <artifactId>LambdaApp</artifactId>
-    <version>1.3</version>
+    <version>1.6</version>
     <build>
         <plugins>
         <plugin>
