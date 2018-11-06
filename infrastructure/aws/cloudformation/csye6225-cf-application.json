@@ -3,7 +3,14 @@
  
     "Parameters" : {
          "myBucketName":{
-            "Default":"fernandoi.me",
+            "Default":"shunti.me",
+            "Description": "S3 bucket name",
+            "Type": "String"
+         },
+         
+         
+         "codeDeployBucket":{
+            "Default": "code-deploy.shunti.me.csye6225.com",
             "Description": "S3 bucket name",
             "Type": "String"
          },
@@ -94,6 +101,127 @@
      },
  
     "Resources" : { 
+    
+        "SNSTopic":{
+            "Type" : "AWS::SNS::Topic",
+            "Properties" : {
+            }
+
+        },
+        
+        "SNSSubscription":{
+            "Type" : "AWS::SNS::Subscription",
+            "Properties" : {
+                "Endpoint" : {"Ref":"myLambda"},
+                "Protocol" : "lambda",
+                "TopicArn" : {"Ref":"SNSTopic"}
+            }
+        },
+    
+    
+    
+        "myLambda": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "Handler" : "Email",
+                "Role": { "Fn::GetAtt" : ["lambdaIAMRole", "Arn"] },
+                "Code": {
+                    "S3Bucket": {"Fn::Join": ["", ["code-deploy.", {"Ref": "S3Bucket" },".csye6225.com" ]] },
+                    "S3Key": "default.zip"
+                },
+                "Description" : "lambda to host webapp",
+                
+                "Runtime": "java8",
+                "Timeout": 25,
+                "TracingConfig": {
+                    "Mode": "Active"
+                }
+            }
+        },
+        
+        
+        
+        "lambdaIAMRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "RoleName" : "lambdaIAMRole",
+                "AssumeRolePolicyDocument": {
+                    "Version" : "2012-10-17",
+                    "Statement": [ {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [ "lambda.amazonaws.com" ]
+                        },
+                        "Action": [ "sts:AssumeRole" ]
+                    } ]
+                },
+                "Path": "/",
+                "Policies": [ {
+                    "PolicyName": "CodeDeploy-lambda-S3",
+                    "PolicyDocument": {
+                        "Version" : "2012-10-17",
+                        "Statement": [ {
+                            "Effect": "Allow",
+                            "Action": ["s3:Get*", "s3:List*"],
+                            "Resource": {"Fn::Join" : ["",["arn:aws:s3:::", {"Ref" : "codeDeployBucket"}, "/*"]]}
+                        }]
+                    }
+                },
+                {
+                    "PolicyName": "lambdaExecutionRole",
+                    "PolicyDocument": {
+                        "Version" : "2012-10-17",
+                        "Statement": [ {
+                            "Effect": "Allow",
+                            "Action": "logs:CreateLogGroup",
+                            "Resource": "arn:aws:logs:us-east-1:*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": ["logs:CreateLogStream",
+                                       "logs:PutLogEvents"],
+                            "Resource": "arn:aws:logs:us-east-1:*:log-group:/aws/lambda/myLambda:*"
+                        }]
+                    }
+                }],
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/service-role/AmazonDynamoDBFullAccess", 
+                    "arn:aws:iam::aws:policy/service-role/AmazonSESFullAccess"
+                ]
+                
+            }
+        },
+        
+        
+        "snsIAMRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "RoleName" : "snsIAMRole",
+                "AssumeRolePolicyDocument": {
+                    "Version" : "2012-10-17",
+                    "Statement": [ {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [ "ssm.amazonaws.com" ]
+                        },
+                        "Action": [ "sts:AssumeRole" ]
+                    } ]
+                },
+                "Path": "/",
+                "Policies": [ {
+                    "PolicyName": "snsFullAccess",
+                    "PolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                        {
+                            "Action": ["sns:*"],
+                            "Effect": "Allow",
+                            "Resource": "*"
+                        }]
+                    }
+                }]
+            }
+        },
     
          "MyDBSubnetGroup" : {
               "Type" : "AWS::RDS::DBSubnetGroup",

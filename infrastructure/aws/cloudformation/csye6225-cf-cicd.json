@@ -15,7 +15,7 @@
             "Properties" : {
 
                 "BucketName": {"Fn::Join": ["", ["code-deploy.", {"Ref": "S3Bucket" },".csye6225.com" ]] }
-
+                
             }
         },
    
