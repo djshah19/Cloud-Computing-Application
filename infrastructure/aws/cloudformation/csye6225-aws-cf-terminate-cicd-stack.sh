@@ -25,6 +25,8 @@ aws iam detach-role-policy --role-name CodeDeployServiceRole --policy-arn arn:aw
 aws iam delete-role --role-name CodeDeployServiceRole
 
 
+aws cloudformation delete-stack --stack-name $stack_name
+
 
 if [ $? -eq 0 ]; then
   echo "Creating progress"
