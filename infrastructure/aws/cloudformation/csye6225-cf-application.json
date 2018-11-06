@@ -122,26 +122,7 @@
     
     
     
-        "myLambda": {
-            "Type": "AWS::Lambda::Function",
-	    "DependsOn":"WebServerInstance",
-            "Properties": {
-                "Handler" : "Email",
-                "Role": { "Fn::GetAtt" : ["lambdaIAMRole", "Arn"] },
-                "Code": {
-                    "S3Bucket": {"Ref": "S3Bucket" },
-                    "S3Key": "default.zip"
-                },
-                "Description" : "lambda to host webapp",
-                
-                "Runtime": "java8",
-                "Timeout": 25,
-                "TracingConfig": {
-                    "Mode": "Active"
-                }
-            }
-        },
-        
+       
         
         
         "lambdaIAMRole": {
