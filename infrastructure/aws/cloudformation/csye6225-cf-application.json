@@ -103,6 +103,7 @@
     "Resources" : { 
     
         "SNSTopic":{
+	    "DependsOn":"myLambda",
             "Type" : "AWS::SNS::Topic",
             "Properties" : {
             }
@@ -110,6 +111,7 @@
         },
         
         "SNSSubscription":{
+	    "DependsOn":"myLambda",	
             "Type" : "AWS::SNS::Subscription",
             "Properties" : {
                 "Endpoint" : {"Ref":"myLambda"},
@@ -122,11 +124,12 @@
     
         "myLambda": {
             "Type": "AWS::Lambda::Function",
+	    "DependsOn":"WebServerInstance",
             "Properties": {
                 "Handler" : "Email",
                 "Role": { "Fn::GetAtt" : ["lambdaIAMRole", "Arn"] },
                 "Code": {
-                    "S3Bucket": {"Fn::Join": ["", ["code-deploy.", {"Ref": "S3Bucket" },".csye6225.com" ]] },
+                    "S3Bucket": {"Ref": "S3Bucket" },
                     "S3Key": "default.zip"
                 },
                 "Description" : "lambda to host webapp",
@@ -185,8 +188,8 @@
                     }
                 }],
                 "ManagedPolicyArns": [
-                    "arn:aws:iam::aws:policy/service-role/AmazonDynamoDBFullAccess", 
-                    "arn:aws:iam::aws:policy/service-role/AmazonSESFullAccess"
+                    "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess", 
+                    "arn:aws:iam::aws:policy/AmazonSESFullAccess"
                 ]
                 
             }
