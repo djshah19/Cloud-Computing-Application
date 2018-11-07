@@ -103,7 +103,7 @@
     "Resources" : { 
     
         "SNSTopic":{
-	    "DependsOn":"myLambda",
+	    
             "Type" : "AWS::SNS::Topic",
             "Properties" : {
             }
@@ -111,10 +111,10 @@
         },
         
         "SNSSubscription":{
-	    "DependsOn":"myLambda",	
+	   	
             "Type" : "AWS::SNS::Subscription",
             "Properties" : {
-                "Endpoint" : {"Ref":"myLambda"},
+                "Endpoint" : "arn:aws:lambda:us-east-1:824045003539:function:myLambda",
                 "Protocol" : "lambda",
                 "TopicArn" : {"Ref":"SNSTopic"}
             }

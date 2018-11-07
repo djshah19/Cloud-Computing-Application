@@ -1,0 +1,102 @@
+{
+    "AWSTemplateFormatVersion" : "2010-09-09",
+ 
+    "Parameters" : {
+         "myBucketName":{
+            "Default":"shunti.me",
+            "Description": "S3 bucket name",
+            "Type": "String"
+         }
+         
+     },
+     
+     "Mappings" : {
+         
+         "AWSRegionArch2AMI" : {
+             "us-east-1"      : { "HVM64" : "ami-9887c6e7"}        
+         }          
+     },
+ 
+    "Resources" : { 
+    
+        "SNSTopic":{
+	    
+            "Type" : "AWS::SNS::Topic",
+            "Properties" : {
+            }
+
+        },
+        
+        "SNSSubscription":{
+	   	
+            "Type" : "AWS::SNS::Subscription",
+            "Properties" : {
+                "Endpoint" : {"Ref":"myLambda"},
+                "Protocol" : "lambda",
+                "TopicArn" : {"Ref":"SNSTopic"}
+            }
+        },
+    
+    
+        "myLambda": {
+            "Type": "AWS::Lambda::Function",
+            
+            "Properties": {
+                "Handler" : "Email",
+                "Role": { "Fn::GetAtt" : ["lambdaIAMRole", "Arn"] },
+                "Code": {
+                    "S3Bucket": {"Ref": {"Fn::Join": ["", ["lambda.", {"Ref": "myBucketName" },".csye6225.com" ]] } },
+                    "S3Key": "LambdaApp-1.6.jar"
+                },
+                "Description" : "lambda to host webapp",
+                
+                "Runtime": "java8",
+                "Timeout": 25,
+                "TracingConfig": {
+                    "Mode": "Active"
+                }
+            }
+        },
+       
+        
+        
+
+        
+        
+        "snsIAMRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "RoleName" : "snsIAMRole",
+                "AssumeRolePolicyDocument": {
+                    "Version" : "2012-10-17",
+                    "Statement": [ {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [ "ssm.amazonaws.com" ]
+                        },
+                        "Action": [ "sts:AssumeRole" ]
+                    } ]
+                },
+                "Path": "/",
+                "Policies": [ {
+                    "PolicyName": "snsFullAccess",
+                    "PolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                        {
+                            "Action": ["sns:*"],
+                            "Effect": "Allow",
+                            "Resource": "*"
+                        }]
+                    }
+                }]
+            }
+        }
+    
+    } 
+    
+
+    
+} 
+ 
+ 
