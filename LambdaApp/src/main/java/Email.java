@@ -19,6 +19,7 @@ public class Email implements RequestHandler<Object,String> {
     public String handleRequest(Object o, Context context) {
         context.getLogger().log("Testing CloudWatch logging");
         try {
+            //context.getClientContext()
             AmazonDynamoDB clientDynamoDB = AmazonDynamoDBClientBuilder.standard().withRegion("us-east-1").build();
             //clientDynamoDB.setEndpoint("arn:aws:dynamodb:us-east-1:147432315547:table/password_reset");
             DynamoDB dynamoDB = new DynamoDB(clientDynamoDB);
