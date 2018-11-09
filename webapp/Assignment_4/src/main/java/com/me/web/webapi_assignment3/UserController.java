@@ -99,7 +99,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "user/reset", method = RequestMethod.GET)
+    @RequestMapping(value = "user/reset", method = RequestMethod.POST)
     public Object resetPassword(HttpServletRequest req, UserDao userDao) throws Exception{
             HashMap<String,Object> map = new HashMap<>();
             String username = req.getParameter("username");

@@ -62,11 +62,17 @@ public class UserDao extends DAO{
     public User getUser(String username) throws Exception {
         try{
             begin();
-            User user = (User)getSession().createQuery("from User where username=:username").setString("username",username).getSingleResult();
+            User user;
+            if(getSession().createQuery("from User where username=:username").setString("username",username).uniqueResult() != null)
+                user = (User)getSession().createQuery("from User where username=:username").setString("username",username).getSingleResult();
+            else
+                user = null;
             return user;
         }catch(HibernateException e){
             rollback();
-            throw new Exception("Could not get user: "+username,e);
+
+            //throw new Exception("Could not get user: "+username,e);
+            return null;
         }
     }
     public List<User> getAllUser() throws Exception {
