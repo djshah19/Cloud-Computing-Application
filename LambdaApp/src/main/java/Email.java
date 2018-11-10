@@ -27,7 +27,7 @@ public class Email implements RequestHandler<SNSEvent,String> {
             clientEmail = AmazonSimpleEmailServiceClientBuilder.standard().withRegion("us-east-1").build();
             DynamoDB dynamoDB = new DynamoDB(clientDynamoDB);
             String uuid = UUID.randomUUID().toString();
-            Table table = dynamoDB.getTable("password_reset");
+            Table table = dynamoDB.getTable(System.getenv("TABLENAME"));
             for(SNSEvent.SNSRecord record: snsEvent.getRecords()) {
                 context.getLogger().log("Found SNS record");
                 SNSEvent.SNS sns = record.getSNS();
