@@ -18,69 +18,68 @@ import java.util.Iterator;
 import java.util.UUID;
 
 public class Email implements RequestHandler<SNSEvent,String> {
+    AmazonDynamoDB clientDynamoDB;
+    AmazonSimpleEmailService clientEmail;
     public String handleRequest(SNSEvent snsEvent, Context context) {
-        context.getLogger().log("Testing CloudWatch logging");
+        context.getLogger().log("Lambda Function started");
         try {
-
-            AmazonDynamoDB clientDynamoDB = AmazonDynamoDBClientBuilder.standard().withRegion("us-east-1").build();
+            clientDynamoDB = AmazonDynamoDBClientBuilder.standard().withRegion("us-east-1").build();
+            clientEmail = AmazonSimpleEmailServiceClientBuilder.standard().withRegion("us-east-1").build();
             DynamoDB dynamoDB = new DynamoDB(clientDynamoDB);
             String uuid = UUID.randomUUID().toString();
             Table table = dynamoDB.getTable("password_reset");
-            //Item item = table.getItem("id", "346575-565656");
             for(SNSEvent.SNSRecord record: snsEvent.getRecords()) {
-                context.getLogger().log("Testing CloudWatch logging 1");
+                context.getLogger().log("Found SNS record");
                 SNSEvent.SNS sns = record.getSNS();
                 String email = sns.getMessage();
-                //QuerySpec spec = new QuerySpec().withKeyConditionExpression("username = :username")
-                  //      .withValueMap(new ValueMap()
-                    //            .withString(":username", email));;
-                //spec.withAttributesToGet("username").
-                //
-                //Calendar.getInstance().add(Calendar.MINUTE, 8);
                 Date todayCal = Calendar.getInstance().getTime();
                 SimpleDateFormat crunchifyFor = new SimpleDateFormat("MMM dd yyyy HH:mm:ss.SSS zzz");
                 String curTime = crunchifyFor.format(todayCal);
                 Date curDate = crunchifyFor.parse(curTime);
                 Long epoch = curDate.getTime();
-                //GetItemSpec getItemSpec = new GetItemSpec();
-                QuerySpec querySpec = new QuerySpec().withKeyConditionExpression("username = :v_username and ttl_timestamp > :v_timestamp")
-                        .withValueMap(new ValueMap().withString("v_username",email).withString(":v_timestamp",epoch.toString())).withConsistentRead(true);
-                //Item checkItem = table.getItem("username",email);
+                context.getLogger().log("Epoch value: "+epoch.toString());
+                QuerySpec querySpec = new QuerySpec().withKeyConditionExpression("username = :vusername").withFilterExpression("ttl_timestamp > :vtimestamp")
+                        .withValueMap(new ValueMap()
+                                .withString(":vusername",email)
+                                .withString(":vtimestamp",epoch.toString()));
                 ItemCollection<QueryOutcome> items = table.query(querySpec);
                 Iterator<Item> iterator = items.iterator();
-                if(!iterator.hasNext()) {
-                        context.getLogger().log("Testing CloudWatch logging 2");
-                        Calendar.getInstance().add(Calendar.MINUTE, 8);
-                        Date today = Calendar.getInstance().getTime();
+                if(iterator.hasNext() == false) {
+                        context.getLogger().log("No entry found for username:"+email);
+                        Calendar cal = Calendar.getInstance();
+                        cal.add(Calendar.MINUTE, Integer.parseInt(System.getenv("TTL")));
+                        Date today = cal.getTime();
                         SimpleDateFormat crunchifyFormat = new SimpleDateFormat("MMM dd yyyy HH:mm:ss.SSS zzz");
                         String currentTime = crunchifyFormat.format(today);
-                        String link = "https://csye6225-fall2018-fernandoi.me/" + uuid;
+                        String link = System.getenv("DOMAIN_NAME")+"/"+ uuid;
                         Date date = crunchifyFormat.parse(currentTime);
-                        long epochTime = date.getTime();
+                        Long epochTime = date.getTime();
                         Item item = new Item();
-                        //item.withPrimaryKey("id", uuid);
                         item.withPrimaryKey("username", email);
-                        item.with("ttl_timestamp", epochTime);
+                        item.with("ttl_timestamp", epochTime.toString());
                         item.with("Subject", "Password Reset Link");
                         item.with("link", link);
-                        context.getLogger().log("Testing");
+                        context.getLogger().log("Logging time:" + epochTime.toString());
                         PutItemOutcome outcome = table.putItem(item);
-                        //context.getLogger().log(outcome.toString());
-                        context.getLogger().log(email);
-                        AmazonSimpleEmailService client = AmazonSimpleEmailServiceClientBuilder.standard().withRegion("us-east-1").build();
                         SendEmailRequest request = new SendEmailRequest().withDestination(new Destination().withToAddresses(email)).withMessage(new Message()
                                 .withBody(new Body()
                                         .withText(new Content()
                                                 .withCharset("UTF-8").withData("Password reset Link:" + link)))
                                 .withSubject(new Content()
                                         .withCharset("UTF-8").withData("Password Reset Link")))
-                                .withSource("no-reply@test.csye6225-fall2018-fernandoi.me");
-                        client.sendEmail(request);
+                                .withSource(System.getenv("FROM_EMAIL"));
+                        clientEmail.sendEmail(request);
                         context.getLogger().log("Email sent!");
+                }
+                else{
+                    Item item = iterator.next();
+                    context.getLogger().log("Entry found:");
+                    context.getLogger().log("username:"+item.getString("username"));
+                    context.getLogger().log("timestamp:"+item.getString("ttl_timestamp")+" current:"+epoch.toString());
                 }
             }
         } catch (Exception ex) {
-            context.getLogger().log("The email was not sent. Error message: " + ex.getMessage()+"stack: "+ex.getStackTrace()[ex.getStackTrace().length -1].getLineNumber());
+            context.getLogger().log("Error message: " + ex.getMessage()+"stack: "+ex.getStackTrace()[ex.getStackTrace().length -1].getLineNumber());
             context.getLogger().log(ex.getStackTrace()[ex.getStackTrace().length -1].getFileName());
 
         }
