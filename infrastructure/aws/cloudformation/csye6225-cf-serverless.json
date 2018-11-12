@@ -6,8 +6,19 @@
             "Default":"shunti.me",
             "Description": "S3 bucket name",
             "Type": "String"
+         },
+         "SNSNAME":{
+            "Default":"arn:aws:sns:us-east-1:147432315547:reset",
+            "Description": "SNS ARN for test",
+            "Type": "String"
+         },
+         "lambdaIAMRole":{
+            "Default":"role",
+            "Description": "lambda IAM Role",
+            "Type": "String"
          }
-         
+
+
      },
      
      "Mappings" : {
@@ -18,50 +29,42 @@
      },
  
     "Resources" : { 
-    
-        "SNSTopic":{
-	    
-            "Type" : "AWS::SNS::Topic",
-            "Properties" : {
-            }
 
-        },
-        
-        "SNSSubscription":{
-	   	
-            "Type" : "AWS::SNS::Subscription",
-            "Properties" : {
-                "Endpoint" : {"Ref":"myLambda"},
-                "Protocol" : "lambda",
-                "TopicArn" : {"Ref":"SNSTopic"}
-            }
-        },
-    
-    
+            
         "myLambda": {
             "Type": "AWS::Lambda::Function",
             
             "Properties": {
+                "FunctionName":"myLambda",
                 "Handler" : "Email",
-                "Role": { "Fn::GetAtt" : ["lambdaIAMRole", "Arn"] },
+                "Role": {"Ref":"lambdaIAMRole"},
                 "Code": {
-                    "S3Bucket": {"Ref": {"Fn::Join": ["", ["lambda.", {"Ref": "myBucketName" },".csye6225.com" ]] } },
-                    "S3Key": "LambdaApp-1.6.jar"
+                    "S3Bucket": {"Fn::Join": ["", ["lambda.", {"Ref": "myBucketName" },".csye6225.com" ]]  },
+                    "S3Key": "LambdaApp-2.2.jar"
                 },
                 "Description" : "lambda to host webapp",
                 
                 "Runtime": "java8",
-                "Timeout": 25,
-                "TracingConfig": {
-                    "Mode": "Active"
-                }
+                "Timeout": 30,
+                "MemorySize":512
             }
         },
-       
-        
-        
+         
+        "SNSTopic":{
+	    
+            "Type" : "AWS::SNS::Topic",
+            "DependsOn" : "myLambda",
+            "Properties" : {
+                "TopicName" : {"Ref":"SNSNAME"},
+                "Subscription":[{"Endpoint":{"Fn::GetAtt":[
+                    "myLambda","Arn"
+                ]},"Protocol":"lambda"
+                }],
+                "DisplayName":"Reset"
+            }
 
-        
+        },
+
         
         "snsIAMRole": {
             "Type": "AWS::IAM::Role",
@@ -73,7 +76,7 @@
                         "Effect": "Allow",
                         "Principal": {
                             "Service": [ "ssm.amazonaws.com" ]
-                        },
+                        },  
                         "Action": [ "sts:AssumeRole" ]
                     } ]
                 },
@@ -91,12 +94,22 @@
                     }
                 }]
             }
-        }
+        },
+        
+        "LambdaResourcePolicy": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName" : { "Ref" : "myLambda" },
+              "Principal": "sns.amazonaws.com",
+              "Action": "lambda:InvokeFunction",
+              "SourceArn" : { "Ref" : "SNSTopic" }
+            }
+          }
     
     } 
-    
 
-    
+
+
 } 
  
  

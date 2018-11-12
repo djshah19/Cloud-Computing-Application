@@ -50,35 +50,9 @@
                     } ]
                 },
                 "Path": "/",
-                "Policies": [ {
-                    "PolicyName": "CodeDeploy-lambda-S3",
-                    "PolicyDocument": {
-                        "Version" : "2012-10-17",
-                        "Statement": [ {
-                            "Effect": "Allow",
-                            "Action": ["s3:Get*", "s3:List*"],
-                            "Resource": {"Fn::Join" : ["",["arn:aws:s3:::", {"Ref" : "S3CodeBucket"}, "/*"]]}
-                        }]
-                    }
-                },
-                {
-                    "PolicyName": "lambdaExecutionRole",
-                    "PolicyDocument": {
-                        "Version" : "2012-10-17",
-                        "Statement": [ {
-                            "Effect": "Allow",
-                            "Action": "logs:CreateLogGroup",
-                            "Resource": "arn:aws:logs:us-east-1:*"
-                        },
-                        {
-                            "Effect": "Allow",
-                            "Action": ["logs:CreateLogStream",
-                                       "logs:PutLogEvents"],
-                            "Resource": "arn:aws:logs:us-east-1:*:log-group:/aws/lambda/myLambda:*"
-                        }]
-                    }
-                }],
                 "ManagedPolicyArns": [
+                    {"Ref":"CodeDeploylambdaS3"},
+                    {"Ref":"lambdaExecutionPolicy"},
                     "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess", 
                     "arn:aws:iam::aws:policy/AmazonSESFullAccess"
                 ]
@@ -203,7 +177,42 @@
             }
         }
     },
-    
+    "CodeDeploylambdaS3":{
+            "Type": "AWS::IAM::ManagedPolicy",
+            "Properties": {
+                "ManagedPolicyName": "CodeDeploy-lambda-S3",
+                "PolicyDocument": {
+                    "Version" : "2012-10-17",
+                    "Statement": [ {
+                        "Effect": "Allow",
+                        "Action": ["s3:Get*", "s3:List*"],
+                        "Resource": {"Fn::Join" : ["",["arn:aws:s3:::", {"Ref" : "S3LambdaBucket"}, "/*"]]}
+                    }]
+                }
+            }
+    },
+    "lambdaExecutionPolicy":{
+            "Type": "AWS::IAM::ManagedPolicy",
+            "Properties": {
+                "ManagedPolicyName": "LambdaExecutionPolicy",
+                "PolicyDocument": {
+                    "Version" : "2012-10-17",
+                    "Statement": [ {
+                        "Effect": "Allow",
+                        "Action": "logs:CreateLogGroup",
+                        "Resource": "arn:aws:logs:us-east-1:*"
+                    },
+                    {
+                       "Effect": "Allow",
+                       "Action": ["logs:CreateLogStream",
+                                       "logs:PutLogEvents"],
+                            "Resource": "arn:aws:logs:us-east-1:*:log-group:/aws/lambda/myLambda:*"
+                        }
+                        ]
+                    }
+                                
+                }
+    },
             "ListS3BucketsInstanceProfile" : {
             "Type" : "AWS::IAM::InstanceProfile",
             "Properties" : {

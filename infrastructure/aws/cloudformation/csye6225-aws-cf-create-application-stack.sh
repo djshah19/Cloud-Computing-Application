@@ -6,12 +6,10 @@ netStack_name=$2
 
 myS3Bucket=$3
 
-mySNSName=$4
-
 #CICDstack_name=$4
 
 bucketname="${myS3Bucket}"
-snsname="${mySNSName}"
+
 
 stack=$(aws cloudformation describe-stacks --stack-name $netStack_name --query Stacks[0].StackId --output text)
 vpc_name="${netStack_name}-csye6225-vpc"
@@ -33,7 +31,7 @@ Subnet3=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=$subnet3_name
 
 #echo "$EC2_role"
 
-aws cloudformation create-stack --stack-name $stack_name --template-body file://csye6225-cf-application.json --parameters ParameterKey=myBucketName,ParameterValue=$bucketname ParameterKey=VPC,ParameterValue=$vpcId ParameterKey=Subnet1,ParameterValue=$Subnet1 ParameterKey=Subnet2,ParameterValue=$Subnet2 ParameterKey=SNSNAME,ParameterValue=$snsname --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+aws cloudformation create-stack --stack-name $stack_name --template-body file://csye6225-cf-application.json --parameters ParameterKey=myBucketName,ParameterValue=$bucketname ParameterKey=VPC,ParameterValue=$vpcId ParameterKey=Subnet1,ParameterValue=$Subnet1 ParameterKey=Subnet2,ParameterValue=$Subnet2 --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
 #ParameterKey=ListS3BucketsRole,ParameterValue=$EC2_role
 
 if [ $? -eq 0 ]; then
