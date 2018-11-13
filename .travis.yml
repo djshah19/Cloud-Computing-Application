@@ -35,6 +35,9 @@ after_success:
   - mv csye6225-web-app.zip codedeploy_artifact/
   - ls -al
   - pwd
+  - cp LambdaApp/target/LambdaApp-2.2.jar codedeploy_artifact
+  - ls -al
+  - pwd
   - cd codedeploy_artifact
   - ls -al
   - pwd
@@ -53,7 +56,7 @@ deploy:
     on:
       all_branches: true
   - provider: s3
-    local_dir: LambdaApp/target
+    local_dir: codedeploy_artifact
     bucket: $s3_bucket_lambda
     region: us-east-1
     key: LambdaApp-2.2.jar
