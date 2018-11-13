@@ -16,7 +16,7 @@ script:
   - cd ../../..
   - pwd
   - ls -al
-  - cd LambdApp
+  - cd LambdaApp
   - mvn package
   - cd target
   - ls -la
