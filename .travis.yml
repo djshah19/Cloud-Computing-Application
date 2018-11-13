@@ -29,7 +29,7 @@ after_success:
   - ls -al
   - mkdir codedeploy_artifact
   - cp infrastructure/aws/codedeploy/*.sh .
-  - cp infrastructure/aws/codedeploy/*.yml .
+  - cp csye6225-fall2018-lambda/*.yml .
   - zip -r csye6225-web-app.zip csye6225-fall2018-lambda/webapp/Assignment_4/target/webapi_assignment3-0.0.1-SNAPSHOT.war *.sh *.yml
   - ls -al
   - mv csye6225-web-app.zip codedeploy_artifact/

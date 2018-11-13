@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2472240c-3487-49fe-ba1a-7468f744cfae" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../webapp/Assignment_4/src/main/java/com/me/web/service/AmazonSNSHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../webapp/Assignment_4/src/main/java/com/me/web/service/AmazonSNSHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../webapp/Assignment_4/src/main/resources/application-aws.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../webapp/Assignment_4/src/main/resources/application-aws.properties" afterDir="false" />
-    </list>
+    <list default="true" id="2472240c-3487-49fe-ba1a-7468f744cfae" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -111,8 +108,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="58" />
-    <option name="y" value="74" />
+    <option name="x" value="57" />
+    <option name="y" value="73" />
     <option name="width" value="1472" />
     <option name="height" value="719" />
   </component>
@@ -162,7 +159,7 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541987234899" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541987241855" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
