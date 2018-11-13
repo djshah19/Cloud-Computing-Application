@@ -28,14 +28,15 @@ after_success:
   - pwd
   - ls -al
   - mkdir codedeploy_artifact
-  - cp infrastructure/aws/codedeploy/*.sh .
+  - mkdir lambda_codedeploy_artifact
+  - cp csye6225-fall2018-lambda/infrastructure/aws/codedeploy/*.sh .
   - cp csye6225-fall2018-lambda/*.yml .
   - zip -r csye6225-web-app.zip csye6225-fall2018-lambda/webapp/Assignment_4/target/webapi_assignment3-0.0.1-SNAPSHOT.war *.sh *.yml
   - ls -al
   - mv csye6225-web-app.zip codedeploy_artifact/
   - ls -al
   - pwd
-  - cp csye6225-fall2018-lambda/LambdaApp/target/LambdaApp-2.2.jar codedeploy_artifact
+  - cp csye6225-fall2018-lambda/LambdaApp/target/LambdaApp-2.2.jar lambda_codedeploy_artifact
   - ls -al
   - pwd
   - cd codedeploy_artifact
@@ -44,7 +45,11 @@ after_success:
   - cd ..
   - pwd
   - ls -al
-
+  - cd lambda_codedeploy_artifact
+  - ls -la
+  - pwd
+  - cd ..
+  - pwd
 deploy:
   - provider: s3
     local_dir: codedeploy_artifact
@@ -57,7 +62,7 @@ deploy:
     on:
       all_branches: true
   - provider: s3
-    local_dir: codedeploy_artifact
+    local_dir: lambda_codedeploy_artifact
     bucket: $s3_bucket_lambda
     region: us-east-1
     key: LambdaApp-2.2.jar

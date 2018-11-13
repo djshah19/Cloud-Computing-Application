@@ -3,7 +3,7 @@ os: linux
 
 
 files:             
-  - source: ./webapp/Assignment_4/target/webapi_assignment3-0.0.1-SNAPSHOT.war
+  - source: /webapp/Assignment_4/target/webapi_assignment3-0.0.1-SNAPSHOT.war
     destination: /opt/tomcat/webapps
 
 hooks:

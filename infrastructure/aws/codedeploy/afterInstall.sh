@@ -8,7 +8,7 @@ echo "Update complete"
 
 sudo rm -rf /opt/tomcat/webapps/docs  /opt/tomcat/webapps/examples /opt/tomcat/webapps/host-manager  /opt/tomcat/webapps/manager /opt/tomcat/webapps/ROOT
 
-sudo chown tomcat:tomcat /opt/tomcat/webapps/ROOT.war
+sudo chown tomcat:tomcat /opt/tomcat/webapps/webapi_assignment3-0.0.1-SNAPSHOT.war
 
 # cleanup log files
 sudo rm -rf /opt/tomcat/logs/catalina*
