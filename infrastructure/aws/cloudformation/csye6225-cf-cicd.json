@@ -27,44 +27,10 @@
                 
             }
         },
-        
-        
+       
 
-        
-        
-        
-        
-        "lambdaIAMRole": {
-	    "DependsOn":"S3CodeBucket",
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-                "RoleName" : "lambdaIAMRole",
-                "AssumeRolePolicyDocument": {
-                    "Version" : "2012-10-17",
-                    "Statement": [ {
-                        "Effect": "Allow",
-                        "Principal": {
-                            "Service": [ "lambda.amazonaws.com" ]
-                        },
-                        "Action": [ "sts:AssumeRole" ]
-                    } ]
-                },
-                "Path": "/",
-                "ManagedPolicyArns": [
-                    {"Ref":"CodeDeploylambdaS3"},
-                    {"Ref":"lambdaExecutionPolicy"},
-                    "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess", 
-                    "arn:aws:iam::aws:policy/AmazonSESFullAccess"
-                ]
-                
-            }
-        },
-        
-        
-        
    
-   
-      "CodeDeployEC2ServiceRole": {
+        "CodeDeployEC2ServiceRole": {
          "Type": "AWS::IAM::Role",
          "Properties": {
          	"RoleName" : "CodeDeployEC2ServiceRole",
@@ -203,32 +169,12 @@
                         "Action": ["s3:Get*", "s3:List*"],
                         "Resource": {"Fn::Join" : ["",["arn:aws:s3:::", {"Ref" : "S3LambdaBucket"}, "/*"]]}
                     }]
+    
                 }
+    
             }
     },
-    "lambdaExecutionPolicy":{
-            "Type": "AWS::IAM::ManagedPolicy",
-            "Properties": {
-                "ManagedPolicyName": "LambdaExecutionPolicy",
-                "PolicyDocument": {
-                    "Version" : "2012-10-17",
-                    "Statement": [ {
-                        "Effect": "Allow",
-                        "Action": "logs:CreateLogGroup",
-                        "Resource": "arn:aws:logs:us-east-1:*"
-                    },
-                    {
-                       "Effect": "Allow",
-                       "Action": ["logs:CreateLogStream",
-                                       "logs:PutLogEvents"],
-                            "Resource": "arn:aws:logs:us-east-1:*:log-group:/aws/lambda/myLambda:*"
-                        }
-                        ]
-                    }
-                                
-                }
-    },
-            "ListS3BucketsInstanceProfile" : {
+    "ListS3BucketsInstanceProfile" : {
             "Type" : "AWS::IAM::InstanceProfile",
             "Properties" : {
                 "Path" : "/",
