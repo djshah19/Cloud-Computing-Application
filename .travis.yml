@@ -16,6 +16,13 @@ script:
   - cd ../../..
   - pwd
   - ls -al
+  - cd LambdApp
+  - mvn package
+  - cd target
+  - ls -la
+  - cd ../../..
+  - pwd
+  - ls -la
 
 after_success:
   - pwd
@@ -45,6 +52,17 @@ deploy:
     secret_access_key: $secret_access_key
     on:
       all_branches: true
+  - provider: s3
+    local_dir: LambdaApp/target
+    bucket: $s3_bucket_lambda
+    region: us-east-1
+    key: LambdaApp-2.2.jar
+    bundle_type: jar
+    skip_cleanup: true
+    access_key_id: $access_key_id
+    secret_access_key: $secret_access_key
+    on:
+      all_branches: true
   - provider: codedeploy
     access_key_id: $access_key_id
     bucket: $s3_bucket
@@ -57,4 +75,4 @@ deploy:
     wait-until-deployed: true
     on:
       all_branches: true
-      
+
