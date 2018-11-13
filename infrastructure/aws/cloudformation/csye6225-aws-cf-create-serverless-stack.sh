@@ -28,9 +28,7 @@ if [ $? -eq 0 ]; then
   echo "Creating progress"
   aws cloudformation wait stack-create-complete --stack-name $stack_name
   echo "Stack created successfully"
-  echo "Updating Lambda Function"
-  aws lambda update-function-code --function-name myLambda --region us-east-1 --s3-bucket lambda.fernandoi.me.csye6225.com --s3-key LambdaApp-2.2.jar
-  echo "Update complete"
+  
 else
   echo "Failure while creating stack"
 fi
