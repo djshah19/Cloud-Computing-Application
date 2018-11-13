@@ -3,7 +3,7 @@ os: linux
 
 
 files:             
-  - source: /lambda_codedeploy_artifact/webapp/Assignment_4/target/webapi_assignment3-0.0.1-SNAPSHOT.war
+  - source: /csye6225-fall2018-lambda/webapp/Assignment_4/target/webapi_assignment3-0.0.1-SNAPSHOT.war
     destination: /opt/tomcat/webapps
 
 hooks:
