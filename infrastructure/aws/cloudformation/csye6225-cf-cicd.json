@@ -149,7 +149,7 @@
                         "codedeploy:GetApplicationRevision"
                     ],
                     "Resource": [
-                        "arn:aws:codedeploy:us-east-1:147432315547:application:CODE_DEPLOY_APPLICATION_NAME"
+                        "arn:aws:codedeploy:us-east-1:*:application:CODE_DEPLOY_APPLICATION_NAME"
                     ]
                 },
                 {
@@ -168,9 +168,9 @@
                         "codedeploy:GetDeploymentConfig"
                     ],
                     "Resource": [
-                        "arn:aws:codedeploy:us-east-1:147432315547:deploymentconfig:CodeDeployDefault.OneAtATime",
-                        "arn:aws:codedeploy:us-east-1:147432315547:deploymentconfig:CodeDeployDefault.HalfAtATime",
-                        "arn:aws:codedeploy:us-east-1:147432315547:deploymentconfig:CodeDeployDefault.AllAtOnce"
+                        "arn:aws:codedeploy:us-east-1:*:deploymentconfig:CodeDeployDefault.OneAtATime",
+                        "arn:aws:codedeploy:us-east-1:*:deploymentconfig:CodeDeployDefault.HalfAtATime",
+                        "arn:aws:codedeploy:us-east-1:*:deploymentconfig:CodeDeployDefault.AllAtOnce"
                     ]
                 }
                 ]
