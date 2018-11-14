@@ -7,7 +7,7 @@ aws cloudformation delete-stack --stack-name $stack_name
 
 
 if [ $? -eq 0 ]; then
-  echo "Deleting in progress"
+  echo "Delete in progress"
   aws cloudformation wait stack-create-complete --stack-name $stack_name
   echo "Stack deleted successfully"
   
