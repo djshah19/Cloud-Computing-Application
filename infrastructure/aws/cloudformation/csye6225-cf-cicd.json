@@ -55,7 +55,10 @@
                      "Resource": {"Fn::Join" : ["",["arn:aws:s3:::", {"Ref" : "S3CodeBucket"}, "/*"]]}
                   } ]
                }
-               } ]
+               } ],
+            "ManagedPolicyArns": [
+                "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+            ]
             }
       }, 
       
