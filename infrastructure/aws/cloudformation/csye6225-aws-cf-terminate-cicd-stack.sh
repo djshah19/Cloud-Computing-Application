@@ -5,12 +5,14 @@ stack_name=$1
 bucket_name=$2
 
 bucketName="code-deploy.$bucket_name.csye6225.com"
+bucketName2="lambda.$bucket_name.csye6225.com"
 
 
 echo deleting the stack
 
 
 aws s3 rb s3://$bucketName --force
+aws s3 rb s3://$bucketName2 --force
 
 
 aws iam remove-role-from-instance-profile --instance-profile-name ayyodevre --role-name CodeDeployEC2ServiceRole
