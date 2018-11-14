@@ -33,7 +33,7 @@
             "Properties": {
                 "FunctionName":"myLambda",
                 "Handler" : "Email",
-                "Role": {"Ref":"lambdaIAMRole"},
+                "Role": {"Fn::GetAtt" : ["lambdaIAMRole", "Arn"] },
                 "Code": {
                     "S3Bucket": {"Fn::Join": ["", ["lambda.", {"Ref": "myBucketName" },".csye6225.com" ]]  },
                     "S3Key": "LambdaApp-2.2.jar"
