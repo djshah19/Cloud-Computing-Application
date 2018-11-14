@@ -217,12 +217,13 @@
                 {"Fn::Join":["",["sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dusername=",{"Ref":"DBUsername"},"\\\"\" >> /opt/tomcat/bin/setenv.sh "]]},
                 {"Fn::Join":["",["sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -Dpassword=",{"Ref":"DBPassword"},"\\\"\" >> /opt/tomcat/bin/setenv.sh "]]},
                 {"Fn::Join":["",["sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -DbucketName=",{"Ref":"S3Bucket"},"\\\"\" >> /opt/tomcat/bin/setenv.sh "]]},
-                {"Fn::Join":["",["sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -DsnsName=",{"Ref":"mySNSTopicName"},"\" >> /opt/tomcat/bin/setenv.sh "]]},
-                  "chmod +x /opt/tomcat/bin/setenv.sh",
+                {"Fn::Join":["",["sudo echo \"JAVA_OPTS=\\\"\\${JAVA_OPTS} -DsnsName=",{"Ref":"mySNSTopicName"},"\\\"\" >> /opt/tomcat/bin/setenv.sh "]]},
                   
-                  "systemctl daemon-reload",
+                "chmod +x /opt/tomcat/bin/setenv.sh",
+                
+                "systemctl daemon-reload",
                   "#systemctl start cloudwatch.service",
-                  "#systemctl enable cloudwatch.service",
+                  "#systemctl enable cloudwatch.service",   
                   "systemctl enable tomcat.service",
                   "systemctl start tomcat.service"]
                  ]}},
