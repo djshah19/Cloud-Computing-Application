@@ -57,7 +57,8 @@
                }
                } ],
             "ManagedPolicyArns": [
-                "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+                "arn:aws:iam::aws:policy/AmazonSNSFullAccess", "arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy", 
+                "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
             ]
             }
       }, 
