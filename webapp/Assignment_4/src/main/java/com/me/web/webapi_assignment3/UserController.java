@@ -5,6 +5,7 @@ import com.me.web.pojo.User;
 
 import com.me.web.service.AmazonSNSHelper;
 import com.me.web.service.LogHelper;
+import com.timgroup.statsd.StatsDClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -26,8 +27,12 @@ public class UserController {
     @Autowired
     AmazonSNSHelper amazonSNS;
 
+    @Autowired
+    private StatsDClient statsDClient;
+
     @RequestMapping(value = "user/save", method = RequestMethod.POST)
     public String saveUser(HttpServletRequest req, UserDao userDao) throws Exception{
+        statsDClient.incrementCounter("endpoint.user.save.api.post");
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         LogHelper.logInfoEntry("Entering");
@@ -107,6 +112,7 @@ public class UserController {
 
     @RequestMapping(value = "user/reset", method = RequestMethod.POST)
     public Object resetPassword(HttpServletRequest req, UserDao userDao) throws Exception{
+            statsDClient.incrementCounter("endpoint.user.reset.api.post");
             HashMap<String,Object> map = new HashMap<>();
             String username = req.getParameter("username");
             LogHelper.logInfoEntry("Reset API logging");
