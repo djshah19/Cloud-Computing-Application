@@ -39,7 +39,7 @@
                     "S3Key": "LambdaApp-2.2.jar"
                 },
                 "Description" : "lambda to host webapp",
-                
+                "Environment" : {"Variables": {"DOMAIN_NAME":{"Fn::Join":["",["http://csye6225-Fall2018-",{"Ref": "myBucketName" } ]]}, "FROM_EMAIL":{"Fn::Join":["",["no-reply@test.csye6225-fall2018-",{"Ref": "myBucketName" } ]]}, "TABLENAME":"csye6225", "TTL":"5"} },
                 "Runtime": "java8",
                 "Timeout": 30,
                 "MemorySize":512
