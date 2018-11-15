@@ -36,9 +36,10 @@ public class UserController {
     @RequestMapping(value = "user/save", method = RequestMethod.POST)
     public String saveUser(HttpServletRequest req, UserDao userDao) throws Exception{
         statsDClient.incrementCounter("endpoint.user.save.api.post");
+        logger.logInfoEntry("User/save initiated");
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        logger.logInfoEntry("Entering");
+
         if(username != null && password != null && username.length() > 0 && password.length() > 0) {
             User user = new User();
             user.setUsername(username);
@@ -64,6 +65,7 @@ public class UserController {
 
     @RequestMapping(value = "user/{id}", method = RequestMethod.GET)
     public Object getUser(@PathVariable("id") String id, HttpServletRequest req, UserDao userDao) throws Exception{
+        statsDClient.incrementCounter("endpoint.user.id.api.get");
         String headers = req.getHeader(HttpHeaders.AUTHORIZATION);
         if(headers != null) {
             String base64Credentials = headers.substring("Basic".length()).trim();
@@ -90,6 +92,8 @@ public class UserController {
 
     @RequestMapping(value = "user", method = RequestMethod.GET)
     public Object getUser(HttpServletRequest req, UserDao userDao) throws Exception{
+        statsDClient.incrementCounter("endpoint.user.api.get");
+        logger.logInfoEntry("Get User initiated");
         String headers = req.getHeader(HttpHeaders.AUTHORIZATION);
         if(headers != null) {
             String base64Credentials = headers.substring("Basic".length()).trim();
@@ -100,6 +104,7 @@ public class UserController {
             if (user != null && user.getUsername().equalsIgnoreCase("root@root.com")) {
                 List<User> userList = userDao.getAllUser();
                 if (userList != null) {
+                    logger.logInfoEntry("Get user completed");
                     return userList;
                 } else {
                     return null;
@@ -116,9 +121,9 @@ public class UserController {
     @RequestMapping(value = "user/reset", method = RequestMethod.POST)
     public Object resetPassword(HttpServletRequest req, UserDao userDao) throws Exception{
             statsDClient.incrementCounter("endpoint.user.reset.api.post");
+            logger.logInfoEntry("Reset API logging");
             HashMap<String,Object> map = new HashMap<>();
             String username = req.getParameter("username");
-        logger.logInfoEntry("Reset API logging");
             User user = userDao.getUser(username);
             if (user != null ) {
                 amazonSNS.publish(username);

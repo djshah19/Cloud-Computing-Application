@@ -1,8 +1,5 @@
 package com.me.web.service;
 
-import org.slf4j.event.Level;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.logging.FileHandler;
@@ -11,6 +8,7 @@ import java.util.logging.SimpleFormatter;
 
 @Service
 public class LogHelper {
+
     Logger logger = Logger.getLogger("MyLog");
     FileHandler fh;
 
@@ -35,5 +33,4 @@ public class LogHelper {
         fh.setFormatter(formatter);            // the following statement is used to log any messages
         logger.log(new Level(""),msg);
     }*/
-
 }
