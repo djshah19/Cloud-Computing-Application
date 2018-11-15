@@ -10,8 +10,12 @@ bucketName2="lambda.$bucket_name.csye6225.com"
 
 echo deleting the stack
 
+aws s3 rm s3://$bucketName --recursive
+
 
 aws s3 rb s3://$bucketName --force
+
+aws s3 rm s3://$bucketName2 --recursive
 aws s3 rb s3://$bucketName2 --force
 
 
