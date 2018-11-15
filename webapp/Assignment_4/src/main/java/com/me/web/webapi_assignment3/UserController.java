@@ -30,12 +30,15 @@ public class UserController {
     @Autowired
     private StatsDClient statsDClient;
 
+
+    LogHelper logger = new LogHelper();
+
     @RequestMapping(value = "user/save", method = RequestMethod.POST)
     public String saveUser(HttpServletRequest req, UserDao userDao) throws Exception{
         statsDClient.incrementCounter("endpoint.user.save.api.post");
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        LogHelper.logInfoEntry("Entering");
+        logger.logInfoEntry("Entering");
         if(username != null && password != null && username.length() > 0 && password.length() > 0) {
             User user = new User();
             user.setUsername(username);
@@ -44,18 +47,18 @@ public class UserController {
             user.setPassword(password);
             int val = userDao.createUser(user);
             if(val==2) {
-                LogHelper.logInfoEntry("User successfully registered");
+                logger.logInfoEntry("User successfully registered");
                 return "{message:'User successfully registered'}";
             }
             else if(val == 1){
-                LogHelper.logInfoEntry("Email ID incorrect");
+                logger.logInfoEntry("Email ID incorrect");
                 return "{message:'Email ID incorrect'}";
             }
         }else{
-            LogHelper.logInfoEntry("Username or password cannot be blank");
+            logger.logInfoEntry("Username or password cannot be blank");
             return "Username or password cannot be blank";
         }
-        LogHelper.logInfoEntry("User already exist");
+        logger.logInfoEntry("User already exist");
         return "{message:'User already exist'}";
     }
 
@@ -115,16 +118,16 @@ public class UserController {
             statsDClient.incrementCounter("endpoint.user.reset.api.post");
             HashMap<String,Object> map = new HashMap<>();
             String username = req.getParameter("username");
-            LogHelper.logInfoEntry("Reset API logging");
+        logger.logInfoEntry("Reset API logging");
             User user = userDao.getUser(username);
             if (user != null ) {
                 amazonSNS.publish(username);
                 map.put("Code", 200);
                 map.put("Description", "Successfully complete!");
-                LogHelper.logInfoEntry("Successfully complete!");
+                logger.logInfoEntry("Successfully complete!");
                 return map;
             } else {
-                LogHelper.logInfoEntry("Unauthorized!");
+                logger.logInfoEntry("Unauthorized!");
                 return "Unauthorized";
             }
     }

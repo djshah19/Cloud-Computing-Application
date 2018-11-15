@@ -12,6 +12,7 @@ import java.util.List;
 @Service
 public class AmazonSNSHelper {
     AmazonSNSClient snsClient = (AmazonSNSClient) AmazonSNSClientBuilder.standard().withRegion("us-east-1").build();
+
     @Value("${snsName}")
     String snsName;
 
