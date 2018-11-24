@@ -25,9 +25,7 @@
             "Description": "S3 bucket name",
             "Type": "String"
          },
-         
-
-        
+      
          "DBName":{
              "Default": "csye6225",
              "Description": "This is my database name",
@@ -109,7 +107,7 @@
     
         "myAutoScalingGroup" : {
             "Type" : "AWS::AutoScaling::AutoScalingGroup",
-            "DependsOn" : "myListener",
+            "DependsOn" : ["myListener","myListener2"],
             "Properties" : {
                 "VPCZoneIdentifier" : [{"Ref" : "Subnet1"}, {"Ref" : "Subnet2"}],
                 "LaunchConfigurationName" : { "Ref" : "myLaunchConfig"},
@@ -333,6 +331,20 @@
               }],
               "LoadBalancerArn" : { "Ref" : "myLoadBalancer" },
               "Port" : "443",
+              "Protocol" : "HTTP"
+                      
+            }
+          },
+          "myListener2" : {
+            "Type" : "AWS::ElasticLoadBalancingV2::Listener",
+      
+            "Properties" : {
+              "DefaultActions" : [{
+                "Type" : "forward",
+                "TargetGroupArn" : { "Ref" : "myTargetGroup" }
+              }],
+              "LoadBalancerArn" : { "Ref" : "myLoadBalancer" },
+              "Port" : "80",
               "Protocol" : "HTTP"
                       
             }
