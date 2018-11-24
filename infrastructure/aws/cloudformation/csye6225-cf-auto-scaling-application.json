@@ -116,7 +116,7 @@
                 "Cooldown" : "60",
                 "DesiredCapacity" : "3",
                 "TargetGroupARNs" : [{ "Ref" : "myTargetGroup"}],
-                "Tags":[{"Key" : "Name", "Value" : "prod-ec2", "PropagateAtLaunch" : "true"},{"Key" : "owner", "Value" : "csye6225-group", "PropagateAtLaunch" : "true"}]
+                "Tags":[{"Key" : "Name", "Value" : "prod-ec2", "PropagateAtLaunch" : "true"}]
             }
         },
         "WebServerScaleUpPolicy": {
@@ -316,7 +316,8 @@
          "myLoadBalancer" : {
             "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
             "Properties" : {
-              "Subnets" : [{"Ref": "Subnet1"},{"Ref": "Subnet2"}]
+              "Subnets" : [{"Ref": "Subnet1"},{"Ref": "Subnet2"}],
+              "SecurityGroups" : [{"Ref" : "InstanceSecurityGroup"}]
                     
             }
           },
