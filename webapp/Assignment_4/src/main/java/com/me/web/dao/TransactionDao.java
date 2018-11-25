@@ -21,9 +21,11 @@ public class TransactionDao extends DAO{
            begin();
            getSession().save(transaction);
            commit();
+           close();
            return 2;
        } catch(HibernateException e){
            rollback();
+           close();
            throw new Exception("Transaction not saved: "+e.getMessage());
         }
 
@@ -40,6 +42,7 @@ public class TransactionDao extends DAO{
             Transaction transaction = (Transaction)getSession().get(Transaction.class, id);
            if(flag=='X'){
             commit();
+            close();
            }
             if(transaction!=null){
                 return transaction;
@@ -48,6 +51,7 @@ public class TransactionDao extends DAO{
             }
         }catch(HibernateException e){
             rollback();
+            close();
             throw new Exception("Transaction not found: "+e.getMessage());
         }
 
@@ -71,6 +75,7 @@ public class TransactionDao extends DAO{
         }
         catch(HibernateException hex){
             rollback();
+            close();
             throw new Exception("Unauthorized Access");
         }
     }
@@ -82,11 +87,13 @@ public class TransactionDao extends DAO{
             if(tx!=null){
             getSession().delete(tx);
             commit();
+            close();
             return 2;
             }
             return 1;
         } catch(HibernateException e){
             rollback();
+            close();
             throw new Exception("Transaction not saved: "+e.getMessage());
         }
 
@@ -97,6 +104,7 @@ public class TransactionDao extends DAO{
             begin();
             getSession().saveOrUpdate(tx);
             commit();
+            close();
             return 2;
         }catch (HibernateException e){
             rollback();
@@ -112,10 +120,12 @@ public class TransactionDao extends DAO{
             q.setParameter("id", id);
             List<Transaction> list = q.getResultList();
             commit();
+            close();
             return list;
 
         }catch (HibernateException e){
             rollback();
+            close();
             throw new Exception("Exception while getting transactions"+e.getMessage());
         }
     }

@@ -23,10 +23,12 @@ public class AttachmentDao extends DAO{
             begin();
             getSession().save(attachment);
             commit();
+            close();
         return 2;
         }
         catch(HibernateException e){
             rollback();
+            close();
             throw new Exception("Attachment not saved: "+e.getMessage());
         }
     }
@@ -46,12 +48,14 @@ public class AttachmentDao extends DAO{
                 getSession().clear();
             }
             if(attachment!=null){
+                close();
                 return attachment;
             }else{
                 return null;
             }
         }catch(HibernateException e){
             rollback();
+            close();
             throw new Exception("Attachment not found: "+e.getMessage());
         }
 
@@ -63,12 +67,14 @@ public class AttachmentDao extends DAO{
             if(attachment!=null){
                 getSession().delete(attachment);
                 commit();
+                close();
                 return 2;
             }
                 return 1;
         }
         catch(HibernateException e){
             rollback();
+            close();
             throw  new Exception("Attachment not Deleted: "+e.getMessage());
         }
     }
@@ -110,10 +116,12 @@ public class AttachmentDao extends DAO{
             q.setParameter("id", id);
             List<Attachment> list = q.getResultList();
             commit();
+            close();
             return list;
 
         }catch (HibernateException e){
             rollback();
+            close();
             throw new Exception("Exception while getting attachments"+e.getMessage());
         }
     }
@@ -123,9 +131,11 @@ public class AttachmentDao extends DAO{
             begin();
             getSession().saveOrUpdate(at);
             commit();
+            close();
             return 2;
         }catch (HibernateException e){
             rollback();
+            close();
             throw new Exception("Exception while updating attachment"+e.getMessage());
         }
 

@@ -18,8 +18,8 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <stringProp name="ThreadGroup.num_threads">100</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">30</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
@@ -44,9 +44,9 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">ec2-35-174-0-1.compute-1.amazonaws.com</stringProp>
-          <stringProp name="HTTPSampler.port">8080</stringProp>
-          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.domain">www.csye6225-fall2018-fernandoi.me</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">webapi_assignment3-0.0.1-SNAPSHOT/user/save</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -62,7 +62,7 @@
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
           <stringProp name="delimiter">,</stringProp>
           <stringProp name="fileEncoding"></stringProp>
-          <stringProp name="filename">/home/dhwanishah/transaction.csv</stringProp>
+          <stringProp name="filename">/home/ivanfernando/Documents/Transaction/transaction.csv</stringProp>
           <boolProp name="ignoreFirstLine">false</boolProp>
           <boolProp name="quotedData">true</boolProp>
           <boolProp name="recycle">true</boolProp>
@@ -111,9 +111,9 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">ec2-35-174-0-1.compute-1.amazonaws.com</stringProp>
-          <stringProp name="HTTPSampler.port">8080</stringProp>
-          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.domain">www.csye6225-fall2018-fernandoi.me</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">webapi_assignment3-0.0.1-SNAPSHOT/transaction</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -129,7 +129,7 @@
           <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
             <collectionProp name="AuthManager.auth_list">
               <elementProp name="" elementType="Authorization">
-                <stringProp name="Authorization.url">http://ec2-35-174-0-1.compute-1.amazonaws.com:8080/webapi_assignment3-0.0.1-SNAPSHOT/transaction</stringProp>
+                <stringProp name="Authorization.url">https://www.csye6225-fall2018-fernandoi.me/webapi_assignment3-0.0.1-SNAPSHOT/transaction</stringProp>
                 <stringProp name="Authorization.username">${UNAME}@gmail.com</stringProp>
                 <stringProp name="Authorization.password">${PWD}</stringProp>
                 <stringProp name="Authorization.domain"></stringProp>
@@ -147,7 +147,7 @@
           <hashTree/>
         </hashTree>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
-          <stringProp name="filename">/home/dhwanishah/url.csv</stringProp>
+          <stringProp name="filename">/home/ivanfernando/Documents/Transaction/url.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="variableNames">attachment</stringProp>
           <boolProp name="ignoreFirstLine">false</boolProp>
@@ -164,16 +164,16 @@
               <elementProp name="${attachment}" elementType="HTTPFileArg">
                 <stringProp name="File.path">${attachment}</stringProp>
                 <stringProp name="File.paramname">file</stringProp>
-                <stringProp name="File.mimetype">png</stringProp>
+                <stringProp name="File.mimetype">jpeg</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">ec2-35-174-0-1.compute-1.amazonaws.com</stringProp>
-          <stringProp name="HTTPSampler.port">8080</stringProp>
-          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.domain">www.csye6225-fall2018-fernandoi.me</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">webapi_assignment3-0.0.1-SNAPSHOT/transaction/${id}/attachments</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -189,7 +189,7 @@
           <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
             <collectionProp name="AuthManager.auth_list">
               <elementProp name="" elementType="Authorization">
-                <stringProp name="Authorization.url">http://ec2-35-174-0-1.compute-1.amazonaws.com:8080/webapi_assignment3-0.0.1-SNAPSHOT/transaction/${id}/attachments</stringProp>
+                <stringProp name="Authorization.url">https://www.csye6225-fall2018-fernandoi.me/webapi_assignment3-0.0.1-SNAPSHOT/transaction/${id}/attachments</stringProp>
                 <stringProp name="Authorization.username">${UNAME}@gmail.com</stringProp>
                 <stringProp name="Authorization.password">${PWD}</stringProp>
                 <stringProp name="Authorization.domain"></stringProp>
