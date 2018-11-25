@@ -96,10 +96,15 @@
           "Default": "12345",
           "Description": "Hosted Zone ID",
           "Type": "String"
-         }
-         
-         
-     },
+         },
+         "CodeDeployServiceRoleArn":{
+           "Default":"CodeDeployServiceRoleArn",
+           "Description":"CodeDeployServiceRoleArn",
+           "Type":"String"
+          }
+
+      
+        },
      
      "Mappings" : {
          
@@ -172,7 +177,8 @@
                 "Cooldown" : "60",
                 "DesiredCapacity" : "3",
                 "TargetGroupARNs" : [{ "Ref" : "myTargetGroup"}],
-                "Tags":[{"Key" : "Name", "Value" : "prod-ec2", "PropagateAtLaunch" : "true"}]
+                "Tags":[{"Key" : "Name", "Value" : "prod-ec2", "PropagateAtLaunch" : "true"}],
+                "AutoScalingGroupName":"myAutoScalingGroup"
             }
         },
         "WebServerScaleUpPolicy": {
@@ -506,7 +512,34 @@
               "HostedZoneName" : {"Fn::Join" : ["",[ "csye6225-fall2018-",{"Ref": "myBucketName" },"."]]},
               "Type" : "A"
         }
-      }
+      },
+      "CodeDeployApplication" : {
+        "Type" : "AWS::CodeDeploy::Application",
+        "Properties" : {
+          "ApplicationName" : "CODE_DEPLOY_APPLICATION_NAME",
+          "ComputePlatform" : "Server"
+        }
+      },
+      
+      "CodeDeploymentGroup" : {
+        "DependsOn" : ["CodeDeployApplication","myTargetGroup","myAutoScalingGroup"],
+        "Type" : "AWS::CodeDeploy::DeploymentGroup",
+        "Properties" : {
+          "ApplicationName" : "CODE_DEPLOY_APPLICATION_NAME",
+          "DeploymentGroupName" : "deployment1",
+          "AutoScalingGroups":[{"Ref":"myAutoScalingGroup"}],
+          "DeploymentStyle": {
+            "DeploymentOption" : "WITHOUT_TRAFFIC_CONTROL",
+            "DeploymentType": "IN_PLACE"
+          },
+          "LoadBalancerInfo":{
+            "TargetGroupInfoList":[{"Name":{"Fn::GetAtt":["myTargetGroup","TargetGroupName"]}}]
+          },
+          "Ec2TagFilters" : [{"Key" : "Name" ,"Type" : "KEY_AND_VALUE","Value":"prod-ec2" }],
+          "DeploymentConfigName" : "CodeDeployDefault.OneAtATime",
+          "ServiceRoleArn" : {"Ref":"CodeDeployServiceRoleArn"}
+        }
+      } 
     } 
     
 

@@ -29,14 +29,15 @@ Subnet3=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=$subnet3_name
 
 # EC2_role=$(aws iam get-instance-profile --instance-profile-name ayyodevre --query Roles.RoleId)
 
-
+roleArn=$(aws iam get-role --role-name CodeDeployServiceRole --query 'Role.Arn' --output text)
 #echo "$EC2_role"
+echo $roleArn
 
 certificateARN=$(aws acm list-certificates --query 'CertificateSummaryList[0].CertificateArn' --output text)
 
 echo $certificateARN
 
-aws cloudformation create-stack --stack-name $stack_name --template-body file://csye6225-cf-auto-scaling-application.json --parameters ParameterKey=myBucketName,ParameterValue=$bucketname ParameterKey=VPC,ParameterValue=$vpcId ParameterKey=Subnet1,ParameterValue=$Subnet1 ParameterKey=Subnet2,ParameterValue=$Subnet2 ParameterKey=CertificateARN,ParameterValue=$certificateARN --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+aws cloudformation create-stack --stack-name $stack_name --template-body file://csye6225-cf-auto-scaling-application.json --parameters ParameterKey=myBucketName,ParameterValue=$bucketname ParameterKey=VPC,ParameterValue=$vpcId ParameterKey=Subnet1,ParameterValue=$Subnet1 ParameterKey=Subnet2,ParameterValue=$Subnet2 ParameterKey=CertificateARN,ParameterValue=$certificateARN ParameterKey=CodeDeployServiceRoleArn,ParameterValue=$roleArn --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
 #ParameterKey=ListS3BucketsRole,ParameterValue=$EC2_role
 
 if [ $? -eq 0 ]; then
