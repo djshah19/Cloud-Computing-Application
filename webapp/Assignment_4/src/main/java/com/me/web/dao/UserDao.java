@@ -21,11 +21,9 @@ public class UserDao extends DAO{
             begin();
             getSession().save(user);
             commit();
-            close();
             return 2;
         }catch(Exception e){
             rollback();
-            close();
             if(e.getMessage().contains("email"))
                 return 1;
             else
@@ -40,14 +38,12 @@ public class UserDao extends DAO{
            q.setString("username", userName);
            User user = (User)q.uniqueResult();
            commit();
-           close();
            if(user != null && !user.getUsername().isEmpty()&& BCrypt.checkpw(password, user.getPassword())) {
                return user;
            }
            return null;
        }catch(HibernateException e){
            rollback();
-           close();
            throw new Exception("Could not get user: "+userName,e);
        }
     }
@@ -56,11 +52,9 @@ public class UserDao extends DAO{
         try{
             begin();
             User user = (User)getSession().find(User.class,uuid);
-            close();
             return user;
         }catch(HibernateException e){
             rollback();
-            close();
             throw new Exception("Could not get user: "+uuid,e);
         }
     }
@@ -69,18 +63,14 @@ public class UserDao extends DAO{
         try{
             begin();
             User user;
-            if(getSession().createQuery("from User where username=:username").setString("username",username).uniqueResult() != null) {
-                user = (User) getSession().createQuery("from User where username=:username").setString("username", username).getSingleResult();
-
-            }
-            else {
+            if(getSession().createQuery("from User where username=:username").setString("username",username).uniqueResult() != null)
+                user = (User)getSession().createQuery("from User where username=:username").setString("username",username).getSingleResult();
+            else
                 user = null;
-            }
-            close();
             return user;
         }catch(HibernateException e){
             rollback();
-            close();
+
             //throw new Exception("Could not get user: "+username,e);
             return null;
         }
@@ -91,11 +81,9 @@ public class UserDao extends DAO{
             Query q = getSession().createQuery("from User");
             List<User> list = (List<User>)q.getResultList();
             commit();
-            close();
             return list;
         }catch(HibernateException e){
             rollback();
-            close();
             throw new Exception("Could not get user: ",e);
         }
     }

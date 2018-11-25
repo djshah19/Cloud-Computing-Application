@@ -22,13 +22,12 @@ public class AttachmentDao extends DAO{
         try{
             begin();
             getSession().save(attachment);
+            getSession().flush();
             commit();
-            close();
         return 2;
         }
         catch(HibernateException e){
             rollback();
-            close();
             throw new Exception("Attachment not saved: "+e.getMessage());
         }
     }
@@ -45,17 +44,15 @@ public class AttachmentDao extends DAO{
             Attachment attachment = (Attachment)getSession().get(Attachment.class, id);
             if(flag=='X'){
                 commit();
-                getSession().clear();
+                getSession().flush();
             }
             if(attachment!=null){
-                close();
                 return attachment;
             }else{
                 return null;
             }
         }catch(HibernateException e){
             rollback();
-            close();
             throw new Exception("Attachment not found: "+e.getMessage());
         }
 
@@ -66,15 +63,14 @@ public class AttachmentDao extends DAO{
             begin();
             if(attachment!=null){
                 getSession().delete(attachment);
+                getSession().flush();
                 commit();
-                close();
                 return 2;
             }
                 return 1;
         }
         catch(HibernateException e){
             rollback();
-            close();
             throw  new Exception("Attachment not Deleted: "+e.getMessage());
         }
     }
@@ -115,13 +111,12 @@ public class AttachmentDao extends DAO{
             Query q = getSession().createQuery("from Attachment where transaction_id = :id");
             q.setParameter("id", id);
             List<Attachment> list = q.getResultList();
+            getSession().flush();
             commit();
-            close();
             return list;
 
         }catch (HibernateException e){
             rollback();
-            close();
             throw new Exception("Exception while getting attachments"+e.getMessage());
         }
     }
@@ -130,12 +125,11 @@ public class AttachmentDao extends DAO{
         try{
             begin();
             getSession().saveOrUpdate(at);
+            getSession().flush();
             commit();
-            close();
             return 2;
         }catch (HibernateException e){
             rollback();
-            close();
             throw new Exception("Exception while updating attachment"+e.getMessage());
         }
 
