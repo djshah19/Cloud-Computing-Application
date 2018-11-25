@@ -401,6 +401,9 @@
             "DependsOn":"myLoadBalancer",
             "Properties" : {
               "HealthCheckPath" : "/webapi_assignment3-0.0.1-SNAPSHOT",
+              "Matcher": {
+                "HttpCode" : "200,302"
+              } ,
               "HealthCheckIntervalSeconds" : 60,
               "HealthCheckTimeoutSeconds" : 5,
               "HealthyThresholdCount" : 3,
