@@ -400,6 +400,7 @@
             "Type" : "AWS::ElasticLoadBalancingV2::TargetGroup",
             "DependsOn":"myLoadBalancer",
             "Properties" : {
+              "HealthCheckPath" : "/webapi_assignment3-0.0.1-SNAPSHOT",
               "HealthCheckIntervalSeconds" : 60,
               "HealthCheckTimeoutSeconds" : 5,
               "HealthyThresholdCount" : 3,
