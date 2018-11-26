@@ -55,6 +55,7 @@ public class TransactionController {
                 logger.logInfoEntry("Unauthorized access");
                 map.put("Code",401);
                 map.put("Description","Unauthorized");
+                UserDao.close();
                 return map;
             }else{
                 String description = req.getParameter("description");
@@ -95,12 +96,18 @@ public class TransactionController {
                         logger.logInfoEntry("Successfully saved");
                         map.put("Description",tx);
                         map.put("Code",200);
+                        txDao.close();
+                        userDao.close();
+                        attachmentDao.close();
                         return map;
                     }
             }
         }
         logger.logInfoEntry("Save user transacton Unauthorized Access");
         map.put("Code",401);map.put("Description","Unauthorized");
+        txDao.close();
+        userDao.close();
+        attachmentDao.close();
         return map;
 
     }
@@ -123,6 +130,9 @@ public class TransactionController {
                 logger.logInfoEntry("Unauthorized access");
                 map.put("Code",401);
                 map.put("Description","Unauthorized");
+                txDao.close();
+                userDao.close();
+                attachmentDao.close();
                 return map;
             }else{
                 UUID txId = id;
@@ -148,12 +158,18 @@ public class TransactionController {
                                    attachmentDao.editAttachments(attachment);
                         }
                         logger.logInfoEntry("transaction/{id}/attachments successfuly saved");
+                        txDao.close();
+                        userDao.close();
+                        attachmentDao.close();
                         return map;
                     }
                     else{
                         logger.logInfoEntry("transaction/{id}/attachments unsuccessful");
                         map.put("Description", "Attachment unsuccessful");
                         map.put("Code", 500);
+                        txDao.close();
+                        userDao.close();
+                        attachmentDao.close();
                         return map;
                     }
                 }
@@ -161,12 +177,18 @@ public class TransactionController {
                     logger.logInfoEntry("transaction/{id}/attachments unauthorized access");
                     map.put("Code", 401);
                     map.put("Description", "Unauthorized");
+                    txDao.close();
+                    userDao.close();
+                    attachmentDao.close();
                     return map;
                 }
             }
         }
         logger.logInfoEntry("transaction/{id}/attachments unauthorized access");
         map.put("Code",401);map.put("Description","Unauthorized");
+        txDao.close();
+        userDao.close();
+        attachmentDao.close();
         return map;
 
     }

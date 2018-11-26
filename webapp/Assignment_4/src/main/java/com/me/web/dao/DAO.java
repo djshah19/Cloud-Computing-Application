@@ -61,6 +61,7 @@ public class DAO {
 
     public static void close() {
         getSession().close();
+        getSession().disconnect();
         DAO.sessionThread.set(null);
     }
 

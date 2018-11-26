@@ -26,7 +26,7 @@
       </ThreadGroup>
       <hashTree>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
-          <stringProp name="filename">/home/dhwanishah/csye6225/dev/csye6225-fall2018-lambda/Jmeter/uname.csv</stringProp>
+          <stringProp name="filename">/home/ivanfernando/csye6225/dev/csye6225-fall2018-lambda/Jmeter/uname.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="variableNames">username,password</stringProp>
           <boolProp name="ignoreFirstLine">false</boolProp>
@@ -38,7 +38,7 @@
         </CSVDataSet>
         <hashTree/>
         <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
-          <stringProp name="filename">/home/dhwanishah/csye6225/dev/csye6225-fall2018-lambda/Jmeter/transaction.csv</stringProp>
+          <stringProp name="filename">/home/ivanfernando/csye6225/dev/csye6225-fall2018-lambda/Jmeter/transaction.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="variableNames">description,merchant,amount,date,category</stringProp>
           <boolProp name="ignoreFirstLine">false</boolProp>
@@ -102,7 +102,7 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">www.csye6225-fall2018-shahdhw.me</stringProp>
+          <stringProp name="HTTPSampler.domain">www.csye6225-fall2018-fernandoi.me</stringProp>
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -133,7 +133,7 @@
           <boolProp name="resetInterpreter">false</boolProp>
           <stringProp name="parameters"></stringProp>
           <stringProp name="filename"></stringProp>
-          <stringProp name="script">FileWriter fstream = new FileWriter(&quot;/home/dhwanishah/csye6225/dev/csye6225-fall2018-lambda/Jmeter/transactionid.csv&quot;,true);
+          <stringProp name="script">FileWriter fstream = new FileWriter(&quot;/home/ivanfernando/csye6225/dev/csye6225-fall2018-lambda/Jmeter/transactionid.csv&quot;,true);
 BufferedWriter out = new BufferedWriter(fstream);
 out.write(vars.get(&quot;id&quot;));
 out.write(System.getProperty(&quot;line.separator&quot;));
