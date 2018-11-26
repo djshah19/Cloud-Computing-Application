@@ -6,6 +6,10 @@ netStack_name=$2
 
 myS3Bucket=$3
 
+ipBlock1=$4
+ipBlock2=$5
+
+
 #CICDstack_name=$4
 
 bucketname="${myS3Bucket}"
@@ -37,7 +41,7 @@ certificateARN=$(aws acm list-certificates --query 'CertificateSummaryList[0].Ce
 
 echo $certificateARN
 
-aws cloudformation create-stack --stack-name $stack_name --template-body file://csye6225-cf-auto-scaling-application.json --parameters ParameterKey=myBucketName,ParameterValue=$bucketname ParameterKey=VPC,ParameterValue=$vpcId ParameterKey=Subnet1,ParameterValue=$Subnet1 ParameterKey=Subnet2,ParameterValue=$Subnet2 ParameterKey=CertificateARN,ParameterValue=$certificateARN ParameterKey=CodeDeployServiceRoleArn,ParameterValue=$roleArn --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+aws cloudformation create-stack --stack-name $stack_name --template-body file://csye6225-cf-auto-scaling-application.json --parameters ParameterKey=myBucketName,ParameterValue=$bucketname ParameterKey=VPC,ParameterValue=$vpcId ParameterKey=Subnet1,ParameterValue=$Subnet1 ParameterKey=Subnet2,ParameterValue=$Subnet2 ParameterKey=CertificateARN,ParameterValue=$certificateARN ParameterKey=CodeDeployServiceRoleArn,ParameterValue=$roleArn ParameterKey=IPtoBlock1,ParameterValue=$ipBlock1 ParameterKey=IPtoBlock2,ParameterValue=$ipBlock2 --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
 #ParameterKey=ListS3BucketsRole,ParameterValue=$EC2_role
 
 if [ $? -eq 0 ]; then
