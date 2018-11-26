@@ -23,6 +23,7 @@ public class LogHelper {
         SimpleFormatter formatter = new SimpleFormatter();
         fh.setFormatter(formatter);            // the following statement is used to log any messages
         logger.info(msg);
+        fh.close();
     }
 
     /*
