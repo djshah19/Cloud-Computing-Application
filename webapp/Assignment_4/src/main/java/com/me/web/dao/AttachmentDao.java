@@ -25,6 +25,7 @@ public class AttachmentDao extends DAO{
 //            getSession().flush();
             commit();
 //            getSession().clear();
+            close();
         return 2;
         }
         catch(HibernateException e){
@@ -68,6 +69,7 @@ public class AttachmentDao extends DAO{
 //                getSession().flush();
                 commit();
 //                getSession().clear();
+                close();
                 return 2;
             }
                 return 1;
@@ -132,6 +134,7 @@ public class AttachmentDao extends DAO{
 //            getSession().flush();
             commit();
 //            getSession().clear();
+            close();
             return 2;
         }catch (HibernateException e){
             rollback();
