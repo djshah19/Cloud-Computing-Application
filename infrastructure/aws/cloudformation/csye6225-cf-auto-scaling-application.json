@@ -592,9 +592,26 @@
                 "Action" : {
                     "Type" : "BLOCK"
                 },
+                "Priority" : 5,
+                "RuleId" : { "Ref" : "shuntiIPSetRule" }
+            },
+            
+            {
+                "Action" : {
+                    "Type" : "BLOCK"
+                },
+                "Priority" : 10,
+                "RuleId" : { "Ref" : "reqSizeRule" }
+            },
+            
+            {
+                "Action" : {
+                    "Type" : "BLOCK"
+                },
                 "Priority" : 1,
                 "RuleId" : { "Ref" : "shuntiIPSetRule" }
             }
+            
             ]
         }      
     },
@@ -618,6 +635,43 @@
         }      
     },
     
+    "reqSizeRule": {
+        "Type": "AWS::WAFRegional::Rule",
+        "DependsOn" : ["sizeRestrict"],
+        
+        "Properties": {
+           "MetricName": "reqSizeRule",
+           "Name": "reqSizeRule",
+           "Predicates": [
+              {
+                 "Type": "SizeConstraint",
+                 "Negated": false,
+                 "DataId": {"Ref" : "sizeRestrict"}
+              }
+           ]
+        }
+     },
+     
+    "wafrSQLiRule": {
+        "Type": "AWS::WAFRegional::Rule",
+        "DependsOn" : ["wafrSQLiSet"],
+        
+        "Properties": {
+           "MetricName": "wafrSQLiRule",
+           "Name": "wafr-SQLiRule",
+           "Predicates": [
+              {
+                 "Type": "SqlInjectionMatch",
+                 "Negated": false,
+                 "DataId": {"Ref" : "wafrSQLiSet"}
+              }
+           ]
+        }
+     },      
+     
+    
+    
+    
     "myIPSetBlacklist": {
         "Type": "AWS::WAFRegional::IPSet",
         "Properties": {
@@ -633,7 +687,110 @@
             }
             ]
         }      
-    }
+    },
+    
+    "sizeRestrict": {
+        "Type": "AWS::WAFRegional::SizeConstraintSet",
+        "Properties": {
+           "Name": "sizeRestrict",
+           "SizeConstraints": [
+              {
+                 "FieldToMatch": {
+                    "Type": "URI"
+                 },
+                 "TextTransformation": "NONE",
+                 "ComparisonOperator": "GT",
+                 "Size": "512"
+              },
+              {
+                 "FieldToMatch": {
+                    "Type": "QUERY_STRING"
+                 },
+                 "TextTransformation": "NONE",
+                 "ComparisonOperator": "GT",
+                 "Size": "1024"
+              },
+              {
+                 "FieldToMatch": {
+                    "Type": "BODY"
+                 },
+                 "TextTransformation": "NONE",
+                 "ComparisonOperator": "GT",
+                 "Size": "50000"
+              },
+              {
+                 "FieldToMatch": {
+                    "Type": "HEADER",
+                    "Data": "cookie"
+                 },
+                 "TextTransformation": "NONE",
+                 "ComparisonOperator": "GT",
+                 "Size": "4096"
+              }
+           ]
+        }
+     },
+     
+    "wafrSQLiSet": {
+       "Type": "AWS::WAFRegional::SqlInjectionMatchSet",
+       "Properties" : {
+         "Name": "wafrSQLiSet",
+         "SqlInjectionMatchTuples": [
+            {
+               "FieldToMatch": {
+                  "Type": "URI"
+               },
+               "TextTransformation": "URL_DECODE"
+            },
+            {
+               "FieldToMatch": {
+                  "Type": "URI"
+               },
+               "TextTransformation": "HTML_ENTITY_DECODE"
+            },
+            {
+               "FieldToMatch": {
+                  "Type": "QUERY_STRING"
+               },
+               "TextTransformation": "URL_DECODE"
+            },
+            {
+               "FieldToMatch": {
+                  "Type": "QUERY_STRING"
+               },
+               "TextTransformation": "HTML_ENTITY_DECODE"
+            },
+            {
+               "FieldToMatch": {
+                  "Type": "BODY"
+               },
+               "TextTransformation": "URL_DECODE"
+            },
+            {
+               "FieldToMatch": {
+                  "Type": "BODY"
+               },
+               "TextTransformation": "HTML_ENTITY_DECODE"
+            },
+            {
+               "FieldToMatch": {
+                  "Type": "HEADER",
+                  "Data": "cookie"
+               },
+               "TextTransformation": "URL_DECODE"
+            },
+            {
+               "FieldToMatch": {
+                  "Type": "HEADER",
+                  "Data": "cookie"
+               },
+               "TextTransformation": "HTML_ENTITY_DECODE"
+            }
+         ]
+       }
+     }
+    
+    
     
     }
 
