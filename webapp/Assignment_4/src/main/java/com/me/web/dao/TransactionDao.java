@@ -20,10 +20,9 @@ public class TransactionDao extends DAO{
        try{
            begin();
            getSession().save(transaction);
-           getSession().flush();
+//           getSession().flush();
            commit();
-           getSession().clear();
-           close();
+//           getSession().clear();
            return 2;
        } catch(HibernateException e){
            rollback();
@@ -42,10 +41,9 @@ public class TransactionDao extends DAO{
             }
             Transaction transaction = (Transaction)getSession().get(Transaction.class, id);
            if(flag=='X'){
-               getSession().flush();
+//               getSession().flush();
             commit();
-               getSession().clear();
-               close();
+//               getSession().clear();
            }
             if(transaction!=null){
                 return transaction;
@@ -64,9 +62,9 @@ public class TransactionDao extends DAO{
             Transaction tx = getTransactionById(txId);
             if(tx != null){
                 if(tx.getUser().getId() == user.getId()){
-                    getSession().flush();
-                    getSession().clear();
-                    close();
+//                    getSession().flush();
+//                    getSession().clear();
+//                    close();
                     return 2;
                 }
                 else{
@@ -89,11 +87,10 @@ public class TransactionDao extends DAO{
             begin();
             Transaction tx = getTransactionById(id);
             if(tx!=null){
-                getSession().flush();
+//                getSession().flush();
             getSession().delete(tx);
             commit();
-                getSession().clear();
-                close();
+//                getSession().clear();
             return 2;
             }
             return 1;
@@ -107,11 +104,10 @@ public class TransactionDao extends DAO{
     public int editTransaction(Transaction tx)throws Exception{
         try{
             begin();
-            getSession().flush();
+//            getSession().flush();
             getSession().saveOrUpdate(tx);
             commit();
-            getSession().clear();
-            close();
+//            getSession().clear();
             return 2;
         }catch (HibernateException e){
             rollback();
@@ -126,10 +122,9 @@ public class TransactionDao extends DAO{
             Query q = getSession().createQuery("from Transaction where user_id = :id");
             q.setParameter("id", id);
             List<Transaction> list = q.getResultList();
-            getSession().flush();
+//            getSession().flush();
             commit();
-            getSession().clear();
-            close();
+//            getSession().clear();
             return list;
 
         }catch (HibernateException e){
