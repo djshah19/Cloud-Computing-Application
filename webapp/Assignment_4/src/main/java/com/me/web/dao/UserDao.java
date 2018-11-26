@@ -23,6 +23,7 @@ public class UserDao extends DAO{
 //            getSession().flush();
             commit();
 //            getSession().clear();
+            close();
             return 2;
         }catch(Exception e){
             rollback();
@@ -42,6 +43,7 @@ public class UserDao extends DAO{
 //           getSession().flush();
            commit();
 //           getSession().clear();
+           close();
            if(user != null && !user.getUsername().isEmpty()&& BCrypt.checkpw(password, user.getPassword())) {
                return user;
            }
@@ -58,6 +60,7 @@ public class UserDao extends DAO{
             User user = (User)getSession().find(User.class,uuid);
 //            getSession().flush();
 //            getSession().clear();
+            close();
             return user;
         }catch(HibernateException e){
             rollback();
@@ -73,6 +76,7 @@ public class UserDao extends DAO{
                 user = (User)getSession().createQuery("from User where username=:username").setString("username",username).getSingleResult();
             else
                 user = null;
+            close();
             return user;
         }catch(HibernateException e){
             rollback();
