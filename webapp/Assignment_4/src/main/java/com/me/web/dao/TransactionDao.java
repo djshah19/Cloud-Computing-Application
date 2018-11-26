@@ -23,6 +23,7 @@ public class TransactionDao extends DAO{
            getSession().flush();
            commit();
            getSession().clear();
+           close();
            return 2;
        } catch(HibernateException e){
            rollback();
@@ -44,6 +45,7 @@ public class TransactionDao extends DAO{
                getSession().flush();
             commit();
                getSession().clear();
+               close();
            }
             if(transaction!=null){
                 return transaction;
@@ -64,6 +66,7 @@ public class TransactionDao extends DAO{
                 if(tx.getUser().getId() == user.getId()){
                     getSession().flush();
                     getSession().clear();
+                    close();
                     return 2;
                 }
                 else{
@@ -90,6 +93,7 @@ public class TransactionDao extends DAO{
             getSession().delete(tx);
             commit();
                 getSession().clear();
+                close();
             return 2;
             }
             return 1;
@@ -107,6 +111,7 @@ public class TransactionDao extends DAO{
             getSession().saveOrUpdate(tx);
             commit();
             getSession().clear();
+            close();
             return 2;
         }catch (HibernateException e){
             rollback();
@@ -124,6 +129,7 @@ public class TransactionDao extends DAO{
             getSession().flush();
             commit();
             getSession().clear();
+            close();
             return list;
 
         }catch (HibernateException e){
