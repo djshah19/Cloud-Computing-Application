@@ -24,6 +24,7 @@ public class AttachmentDao extends DAO{
             getSession().save(attachment);
             getSession().flush();
             commit();
+            getSession().clear();
         return 2;
         }
         catch(HibernateException e){
@@ -45,6 +46,7 @@ public class AttachmentDao extends DAO{
             if(flag=='X'){
                 commit();
                 getSession().flush();
+                getSession().clear();
             }
             if(attachment!=null){
                 return attachment;
@@ -65,6 +67,7 @@ public class AttachmentDao extends DAO{
                 getSession().delete(attachment);
                 getSession().flush();
                 commit();
+                getSession().clear();
                 return 2;
             }
                 return 1;
@@ -113,6 +116,7 @@ public class AttachmentDao extends DAO{
             List<Attachment> list = q.getResultList();
             getSession().flush();
             commit();
+            getSession().clear();
             return list;
 
         }catch (HibernateException e){
@@ -127,6 +131,7 @@ public class AttachmentDao extends DAO{
             getSession().saveOrUpdate(at);
             getSession().flush();
             commit();
+            getSession().clear();
             return 2;
         }catch (HibernateException e){
             rollback();
