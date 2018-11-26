@@ -35,16 +35,17 @@ public class TransactionDao extends DAO{
     public Transaction getTransactionById(UUID id) throws Exception{
         try {
             char flag = ' ';
+            Transaction transaction;
             if(!getSession().getTransaction().isActive())
             {
                 begin();
             flag = 'X';
             }
-            Transaction transaction = (Transaction)getSession().get(Transaction.class, id);
+            transaction = (Transaction)getSession().get(Transaction.class, id);
            if(flag=='X'){
 //               getSession().flush();
             commit();
-//            close();
+            close();
 //               getSession().clear();
            }
             if(transaction!=null){
@@ -122,12 +123,14 @@ public class TransactionDao extends DAO{
 
     public List<Transaction> getAllTransaction(UUID id)throws Exception{
         try{
+            List<Transaction> list;
             begin();
             Query q = getSession().createQuery("from Transaction where user_id = :id");
             q.setParameter("id", id);
-            List<Transaction> list = q.getResultList();
+            list = q.getResultList();
 //            getSession().flush();
             commit();
+            close();
 //            getSession().clear();
             return list;
 
