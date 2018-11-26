@@ -44,7 +44,7 @@ public class TransactionDao extends DAO{
            if(flag=='X'){
 //               getSession().flush();
             commit();
-            close();
+//            close();
 //               getSession().clear();
            }
             if(transaction!=null){
@@ -93,6 +93,7 @@ public class TransactionDao extends DAO{
             getSession().delete(tx);
             commit();
 //                getSession().clear();
+                close();
             return 2;
             }
             return 1;
