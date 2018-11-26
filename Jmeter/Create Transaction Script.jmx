@@ -52,7 +52,7 @@
         <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
           <collectionProp name="AuthManager.auth_list">
             <elementProp name="" elementType="Authorization">
-              <stringProp name="Authorization.url">https://www.csye6225-fall2018-shahdhw.me/webapi_assignment3-0.0.1-SNAPSHOT/transaction</stringProp>
+              <stringProp name="Authorization.url">https://www.csye6225-fall2018-fernandoi.me/webapi_assignment3-0.0.1-SNAPSHOT/transaction</stringProp>
               <stringProp name="Authorization.username">${username}</stringProp>
               <stringProp name="Authorization.password">${password}</stringProp>
               <stringProp name="Authorization.domain"></stringProp>
