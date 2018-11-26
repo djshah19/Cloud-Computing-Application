@@ -112,10 +112,11 @@ public class AttachmentDao extends DAO{
 
     public List<Attachment> getAllAttachments(UUID id)throws Exception{
         try{
+            List<Attachment> list;
             begin();
             Query q = getSession().createQuery("from Attachment where transaction_id = :id");
             q.setParameter("id", id);
-            List<Attachment> list = q.getResultList();
+            list = q.getResultList();
 //            getSession().flush();
             commit();
 //            getSession().clear();
