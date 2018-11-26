@@ -97,6 +97,23 @@
           "Description": "Hosted Zone ID",
           "Type": "String"
          },
+         
+          "IPtoBlock1": {
+            
+            "Description": "IPAddress to be blocked",
+            "Default" :  "192.0.2.44/32", 
+            "Type": "String"
+        },
+        
+        
+         "IPtoBlock2": {
+            
+            "Description": "IPAddress to be blocked",
+            "Default" :  "192.0.2.44/32",
+            "Type": "String"
+        },
+         
+         
          "CodeDeployServiceRoleArn":{
            "Default":"CodeDeployServiceRoleArn",
            "Description":"CodeDeployServiceRoleArn",
@@ -158,7 +175,7 @@
     },
     "myLoadBalancer" : {
       "Type" : "AWS::ElasticLoadBalancingV2::LoadBalancer",
-      "DependsOn":"InstanceSecurityGroup",
+      "DependsOn":["InstanceSecurityGroup"],
       "Properties" : {
         "Subnets" : [{"Ref": "Subnet1"},{"Ref": "Subnet2"}],
         "SecurityGroups" : [{"Ref" : "InstanceSecurityGroup"}],
@@ -166,6 +183,19 @@
         "Name":"myloadbalancer"
       }
     },
+    
+    
+    "MyWebACLAssociation": {
+        
+        "Type": "AWS::WAFRegional::WebACLAssociation",
+        "DependsOn":["myLoadBalancer","shuntiWebACL"],
+        "Properties": {
+            "ResourceArn": { "Ref": "myLoadBalancer" },
+            "WebACLId": { "Ref": "shuntiWebACL" }
+        }
+    },
+    
+    
         "myAutoScalingGroup" : {
             "Type" : "AWS::AutoScaling::AutoScalingGroup",
             "DependsOn" : ["myListener","myTargetGroup","myLaunchConfig"],
@@ -206,13 +236,13 @@
           "CPUAlarmHigh": {
             "Type": "AWS::CloudWatch::Alarm",
             "Properties": {
-              "AlarmDescription": "Scale-up if CPU > 90% for 10 minutes",
+              "AlarmDescription": "Scale-up if CPU > 10% for 10 minutes",
               "MetricName": "CPUUtilization",
               "Namespace": "AWS/EC2",
               "Statistic": "Average",
               "Period": "300",
               "EvaluationPeriods": "2",
-              "Threshold": "90",
+              "Threshold": "10",
               "AlarmActions": [
                 {
                   "Ref": "WebServerScaleUpPolicy"
@@ -238,7 +268,7 @@
               "Statistic": "Average",
               "Period": "300",
               "EvaluationPeriods": "2",
-              "Threshold": "70",
+              "Threshold": "8",
               "AlarmActions": [
                 {
                   "Ref": "WebServerScaleDownPolicy"
@@ -543,9 +573,69 @@
           "DeploymentConfigName" : "CodeDeployDefault.OneAtATime",
           "ServiceRoleArn" : {"Ref":"CodeDeployServiceRoleArn"}
         }
-      } 
-    } 
+      }, 
+     
     
+    
+    
+    "shuntiWebACL": {
+        "Type": "AWS::WAFRegional::WebACL",
+        "DependsOn" : ["shuntiIPSetRule"],        
+        "Properties": {
+            "Name": "shuntiWebACL",
+            "DefaultAction": {
+                "Type": "ALLOW"
+            },
+            "MetricName" : "shuntiWebACL",
+            "Rules": [
+            {
+                "Action" : {
+                    "Type" : "BLOCK"
+                },
+                "Priority" : 1,
+                "RuleId" : { "Ref" : "shuntiIPSetRule" }
+            }
+            ]
+        }      
+    },
+    
+    "shuntiIPSetRule" : {
+        
+        "Type": "AWS::WAFRegional::Rule",
+        
+        "DependsOn" : ["myIPSetBlacklist"],
+        
+        "Properties": {
+            "Name": "shuntiIPSetRule",
+            "MetricName" : "shuntiIPSetRule",
+            "Predicates": [
+            {
+                "DataId" : {"Ref":"myIPSetBlacklist"},
+                "Negated" : false,
+                "Type" : "IPMatch"
+            }
+            ]
+        }      
+    },
+    
+    "myIPSetBlacklist": {
+        "Type": "AWS::WAFRegional::IPSet",
+        "Properties": {
+            "Name": "myIPSetBlacklist",
+            "IPSetDescriptors": [
+            {
+                "Type" : "IPV4",
+                "Value" : {"Ref":"IPtoBlock1"}
+            },
+            {
+                "Type" : "IPV4",
+                "Value" : {"Ref":"IPtoBlock2"}
+            }
+            ]
+        }      
+    }
+    
+    }
 
     
 } 
