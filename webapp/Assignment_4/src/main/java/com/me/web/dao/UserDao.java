@@ -20,9 +20,9 @@ public class UserDao extends DAO{
         try {
             begin();
             getSession().save(user);
-            getSession().flush();
+//            getSession().flush();
             commit();
-            getSession().clear();
+//            getSession().clear();
             return 2;
         }catch(Exception e){
             rollback();
@@ -39,9 +39,9 @@ public class UserDao extends DAO{
            Query q = getSession().createQuery("from User where username = :username ");
            q.setString("username", userName);
            User user = (User)q.uniqueResult();
-           getSession().flush();
+//           getSession().flush();
            commit();
-           getSession().clear();
+//           getSession().clear();
            if(user != null && !user.getUsername().isEmpty()&& BCrypt.checkpw(password, user.getPassword())) {
                return user;
            }
@@ -56,8 +56,8 @@ public class UserDao extends DAO{
         try{
             begin();
             User user = (User)getSession().find(User.class,uuid);
-            getSession().flush();
-            getSession().clear();
+//            getSession().flush();
+//            getSession().clear();
             return user;
         }catch(HibernateException e){
             rollback();
@@ -88,7 +88,7 @@ public class UserDao extends DAO{
             List<User> list = (List<User>)q.getResultList();
 
             commit();
-            getSession().clear();
+//            getSession().clear();
             return list;
         }catch(HibernateException e){
             rollback();
