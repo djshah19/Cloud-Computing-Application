@@ -716,7 +716,7 @@
                  },
                  "TextTransformation": "NONE",
                  "ComparisonOperator": "GT",
-                 "Size": "50000"
+                 "Size": "10000000"
               },
               {
                  "FieldToMatch": {
