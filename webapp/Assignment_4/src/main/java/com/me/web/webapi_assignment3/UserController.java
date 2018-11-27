@@ -49,6 +49,9 @@ public class UserController {
             int val = userDao.createUser(user);
             if(val==2) {
                 logger.logInfoEntry("User successfully registered");
+                //txDao.close();
+                userDao.close();
+                //attachmentDao.close();
                 return "{message:'User successfully registered'}";
             }
             else if(val == 1){
@@ -60,6 +63,9 @@ public class UserController {
             return "Username or password cannot be blank";
         }
         logger.logInfoEntry("User already exist");
+        //txDao.close();
+        userDao.close();
+        //attachmentDao.close();
         return "{message:'User already exist'}";
     }
 

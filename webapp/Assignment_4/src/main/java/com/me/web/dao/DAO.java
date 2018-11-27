@@ -17,9 +17,9 @@ public class DAO {
 
     private static final Logger log = Logger.getAnonymousLogger();
     Properties prop = new Properties();
-    private static final ThreadLocal<Session> sessionThread = new ThreadLocal<Session>();
+    //private static final ThreadLocal<Session> sessionThread = new ThreadLocal<Session>();
     private static SessionFactory sessionFactory; //= new Configuration().configure().addProperties(prop).buildSessionFactory();
-
+    private static Session session = null;
     protected DAO() throws IOException {
         prop.load(new ClassPathResource("hibernate.properties").getInputStream());
         sessionFactory = new Configuration().configure().addProperties(prop).buildSessionFactory();
@@ -27,12 +27,12 @@ public class DAO {
 
     public static Session getSession()
     {
-        Session session = (Session) DAO.sessionThread.get();
+        // = (Session) DAO.sessionThread.get();
 
         if (session == null)
         {
             session = sessionFactory.openSession();
-            DAO.sessionThread.set(session);
+            //DAO.sessionThread.set(session);
         }
         return session;
     }
@@ -56,12 +56,13 @@ public class DAO {
         } catch (HibernateException e) {
             log.log(Level.WARNING, "Cannot close", e);
         }
-        DAO.sessionThread.set(null);
+        //DAO.sessionThread.set(null);
     }
 
     public static void close() {
-        getSession().close();
-        DAO.sessionThread.set(null);
+        //getSession().close();
+        getSession().disconnect();
+        //DAO.sessionThread.remove();
     }
 
 }

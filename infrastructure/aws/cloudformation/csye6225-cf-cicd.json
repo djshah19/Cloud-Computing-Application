@@ -192,35 +192,9 @@
                     }
                 ],
                 "InstanceProfileName": "ayyodevre"
-            }
-    }, 
-        
-        
-    "CodeDeployApplication" : {
-      "Type" : "AWS::CodeDeploy::Application",
-      "Properties" : {
-        "ApplicationName" : "CODE_DEPLOY_APPLICATION_NAME",
-        "ComputePlatform" : "Server"
-      }
-    },
-    
-    "CodeDeploymentGroup" : {
-      "DependsOn" : ["CodeDeployApplication","CodeDeployServiceRole"],
-      "Type" : "AWS::CodeDeploy::DeploymentGroup",
-      "Properties" : {
-        "ApplicationName" : "CODE_DEPLOY_APPLICATION_NAME",
-        "DeploymentGroupName" : "deployment1",
-        "DeploymentStyle": {
-          "DeploymentOption" : "WITHOUT_TRAFFIC_CONTROL",
-          "DeploymentType": "IN_PLACE"
-        },
-        "Ec2TagFilters" : [{"Key" : "EC2" ,"Type" : "KEY_AND_VALUE","Value":"EC2" }],
-        "DeploymentConfigName" : "CodeDeployDefault.OneAtATime",
-        "ServiceRoleArn" : {"Fn::GetAtt" : ["CodeDeployServiceRole", "Arn"] }
-      }
-    }   
-   
-   }  
+        }
+        }   
+    }  
    
 }
 

@@ -22,7 +22,10 @@ public class AttachmentDao extends DAO{
         try{
             begin();
             getSession().save(attachment);
+//            getSession().flush();
             commit();
+//            getSession().clear();
+            close();
         return 2;
         }
         catch(HibernateException e){
@@ -43,6 +46,7 @@ public class AttachmentDao extends DAO{
             Attachment attachment = (Attachment)getSession().get(Attachment.class, id);
             if(flag=='X'){
                 commit();
+//                getSession().flush();
                 getSession().clear();
             }
             if(attachment!=null){
@@ -62,7 +66,10 @@ public class AttachmentDao extends DAO{
             begin();
             if(attachment!=null){
                 getSession().delete(attachment);
+//                getSession().flush();
                 commit();
+//                getSession().clear();
+                close();
                 return 2;
             }
                 return 1;
@@ -105,11 +112,14 @@ public class AttachmentDao extends DAO{
 
     public List<Attachment> getAllAttachments(UUID id)throws Exception{
         try{
+            List<Attachment> list;
             begin();
             Query q = getSession().createQuery("from Attachment where transaction_id = :id");
             q.setParameter("id", id);
-            List<Attachment> list = q.getResultList();
+            list = q.getResultList();
+//            getSession().flush();
             commit();
+//            getSession().clear();
             return list;
 
         }catch (HibernateException e){
@@ -122,7 +132,10 @@ public class AttachmentDao extends DAO{
         try{
             begin();
             getSession().saveOrUpdate(at);
+//            getSession().flush();
             commit();
+//            getSession().clear();
+            close();
             return 2;
         }catch (HibernateException e){
             rollback();
