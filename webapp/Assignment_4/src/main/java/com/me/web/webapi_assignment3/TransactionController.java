@@ -130,9 +130,9 @@ public class TransactionController {
                 logger.logInfoEntry("Unauthorized access");
                 map.put("Code",401);
                 map.put("Description","Unauthorized");
-                txDao.close();
-                userDao.close();
-                attachmentDao.close();
+                //txDao.close();
+                //userDao.close();
+                //attachmentDao.close();
                 return map;
             }else{
                 UUID txId = id;
@@ -158,18 +158,18 @@ public class TransactionController {
                                    attachmentDao.editAttachments(attachment);
                         }
                         logger.logInfoEntry("transaction/{id}/attachments successfuly saved");
-                        txDao.close();
-                        userDao.close();
-                        attachmentDao.close();
+                        //txDao.close();
+                        //userDao.close();
+                        //attachmentDao.close();
                         return map;
                     }
                     else{
                         logger.logInfoEntry("transaction/{id}/attachments unsuccessful");
                         map.put("Description", "Attachment unsuccessful");
                         map.put("Code", 500);
-                        txDao.close();
-                        userDao.close();
-                        attachmentDao.close();
+                        //txDao.close();
+                        //userDao.close();
+                        //attachmentDao.close();
                         return map;
                     }
                 }
@@ -177,18 +177,18 @@ public class TransactionController {
                     logger.logInfoEntry("transaction/{id}/attachments unauthorized access");
                     map.put("Code", 401);
                     map.put("Description", "Unauthorized");
-                    txDao.close();
-                    userDao.close();
-                    attachmentDao.close();
+                    //txDao.close();
+                    //userDao.close();
+                    //attachmentDao.close();
                     return map;
                 }
             }
         }
         logger.logInfoEntry("transaction/{id}/attachments unauthorized access");
         map.put("Code",401);map.put("Description","Unauthorized");
-        txDao.close();
-        userDao.close();
-        attachmentDao.close();
+        //txDao.close();
+        //userDao.close();
+        //attachmentDao.close();
         return map;
 
     }
