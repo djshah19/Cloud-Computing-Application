@@ -59,6 +59,7 @@ public class Email implements RequestHandler<SNSEvent,String> {
                         item.with("ttl_timestamp", epochTime.toString());
                         item.with("Subject", "Password Reset Link");
                         item.with("link", link);
+                        item.with("token",uuid);
                         context.getLogger().log("Logging time:" + epochTime.toString());
                         PutItemOutcome outcome = table.putItem(item);
                         SendEmailRequest request = new SendEmailRequest().withDestination(new Destination().withToAddresses(email)).withMessage(new Message()
