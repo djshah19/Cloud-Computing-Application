@@ -131,6 +131,33 @@
      },
  
     "Resources" : { 
+        "LoadBalancerSecurityGroup" : {
+            "Type" : "AWS::EC2::SecurityGroup",
+            "Properties" : {
+                "GroupName" : "csye6225-LoadBalancer",
+                "GroupDescription" : "csye6225 LoadBalancer security",
+                "VpcId" : {"Ref" : "VPC"},    
+                "SecurityGroupIngress" : [{
+                    "IpProtocol" : "tcp",
+                    "FromPort": 443,
+                    "ToPort" : 443,
+                    "CidrIp" : "0.0.0.0/0"
+                },{
+                    "IpProtocol" : "tcp",                    
+                    "FromPort": 80,
+                    "ToPort" : 80,
+                    "CidrIp" : "0.0.0.0/0"
+                   },
+                   {
+                    "IpProtocol" : "tcp",                    
+                    "FromPort": 8080,
+                    "ToPort" : 8080,
+                    "CidrIp" : "0.0.0.0/0"
+                   }
+                ]
+                
+            }
+        },
       "InstanceSecurityGroup" : {
         "Type" : "AWS::EC2::SecurityGroup",
         "Properties" : {
@@ -147,27 +174,47 @@
                 "IpProtocol" : "tcp",                    
                 "FromPort": 80,
                 "ToPort" : 80,                    
-                "CidrIp" : "0.0.0.0/0"
+                "SourceSecurityGroupId": {
+                    "Fn::GetAtt": [
+                      "LoadBalancerSecurityGroup",
+                      "GroupId"
+                    ]
+                  }
             },
             
             {
                 "IpProtocol" : "tcp",                    
                 "FromPort": 8080,
                 "ToPort" : 8080,                    
-                "CidrIp" : "0.0.0.0/0"
+                "SourceSecurityGroupId": {
+                    "Fn::GetAtt": [
+                      "LoadBalancerSecurityGroup",
+                      "GroupId"
+                    ]
+                  }
             },
             
             {
                 "IpProtocol" : "tcp",
                 "FromPort": 443,
                 "ToPort" : 443,
-                "CidrIp" : "0.0.0.0/0"
+                "SourceSecurityGroupId": {
+                    "Fn::GetAtt": [
+                      "LoadBalancerSecurityGroup",
+                      "GroupId"
+                    ]
+                  }
             },
             {
                 "IpProtocol" : "tcp", 
                 "FromPort": 3306,
                 "ToPort" : 3306,
-                "CidrIp" : "0.0.0.0/0"
+                "SourceSecurityGroupId": {
+                    "Fn::GetAtt": [
+                      "LoadBalancerSecurityGroup",
+                      "GroupId"
+                    ]
+                  }
             }
             ]
             
@@ -178,9 +225,9 @@
       "DependsOn":["InstanceSecurityGroup"],
       "Properties" : {
         "Subnets" : [{"Ref": "Subnet1"},{"Ref": "Subnet2"}],
-        "SecurityGroups" : [{"Ref" : "InstanceSecurityGroup"}],
         "Scheme" : "internet-facing",
-        "Name":"myloadbalancer"
+        "Name":"myloadbalancer",
+        "SecurityGroups" : [ {"Ref":"LoadBalancerSecurityGroup"}]
       }
     },
     
@@ -198,7 +245,7 @@
     
         "myAutoScalingGroup" : {
             "Type" : "AWS::AutoScaling::AutoScalingGroup",
-            "DependsOn" : ["myListener","myTargetGroup","myLaunchConfig"],
+            "DependsOn" : ["myListener","myListener2","myTargetGroup","myLaunchConfig"],
             "Properties" : {
                 "VPCZoneIdentifier" : [{"Ref" : "Subnet1"}, {"Ref" : "Subnet2"}],
                 "LaunchConfigurationName" : { "Ref" : "myLaunchConfig"},
@@ -316,7 +363,7 @@
                   "groupadd tomcat",
                   "useradd -M -s /bin/nologin -g tomcat -d /opt/tomcat tomcat",
                   "cd /tmp",
-                  "wget http://apache.mirrors.pair.com/tomcat/tomcat-8/v8.5.34/bin/apache-tomcat-8.5.34.tar.gz",
+                  "wget http://ftp.naz.com/apache/tomcat/tomcat-8/v8.5.35/bin/apache-tomcat-8.5.35.tar.gz",
                   "mkdir /opt/tomcat",
                   "tar xvf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1",
                   "cd /opt/tomcat",
@@ -424,6 +471,32 @@
                       
             }
           },
+          
+          "myListener2" : {
+            "Type" : "AWS::ElasticLoadBalancingV2::Listener",
+            "DependsOn":["myTargetGroup","myLoadBalancer"],
+            "Properties" : {
+              
+              "DefaultActions" : [{                
+                "Type" : "redirect",
+                
+                "RedirectConfig" : {
+                    
+                    
+                    "Port" : "443",
+                    "Protocol" : "HTTPS",
+                    
+                    "StatusCode" : "HTTP_301"
+                }
+              }],
+              "LoadBalancerArn" : { "Ref" : "myLoadBalancer" },
+              "Port" : "80",
+              "Protocol" : "HTTP"
+                      
+            }
+          },
+          
+          
           
       
           "myTargetGroup" : {
